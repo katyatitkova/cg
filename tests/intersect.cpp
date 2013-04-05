@@ -20,7 +20,7 @@ TEST(intersect_test, intersect_accuracy)
     b.x = distr(gen);
     b.y = distr(gen);
     std::vector<cg::point_2> res;
-    cg::common::intersect(v.begin(), v.end(), a, b, std::back_inserter(res));
+    cg::common::intersect(v, a, b, std::back_inserter(res));
     std::vector<cg::point_2> res_slow;
     intersect_slow(v.begin(), v.end(), a, b, std::back_inserter(res_slow));
     EXPECT_EQ(res, res_slow);
@@ -39,7 +39,7 @@ TEST(intersect_test, intersect_speed)
     b.y = distr(gen);
     std::vector<cg::point_2> res;
     std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-    cg::common::intersect(v.begin(), v.end(), a, b, std::back_inserter(res));
+    cg::common::intersect(v, a, b, std::back_inserter(res));
     std::chrono::duration<double> sec = std::chrono::system_clock::now() - start;
     std::vector<cg::point_2> res_slow;
     start = std::chrono::system_clock::now();
