@@ -8,15 +8,16 @@ include_directories(${GTEST_INCLUDE_DIR})
 find_package(GMP REQUIRED)
 include_directories(${GMP_INCLUDE_DIR})
 
-find_package(Boost COMPONENTS random REQUIRED)
+find_package(Boost COMPONENTS random system REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARYDIR})
 
 set(SOURCES
-   orientation.cpp
+   #orientation.cpp
+   intersect.cpp
 )
 
-add_executable(cg-test ${SOURCES})
+add_executable(cg-test ${SOURCES} intersect_slow.h)
 target_link_libraries(cg-test ${GTEST_BOTH_LIBRARIES} ${GMP_LIBRARIES})
 
 file(GLOB_RECURSE HEADERS "*.h")
