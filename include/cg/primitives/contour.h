@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <iterator>
+#include <boost/range/algorithm/copy.hpp>
 
 #include "point.h"
 #include "cg/common/range.h"
@@ -16,6 +18,11 @@ namespace cg
    template <class Scalar>
    struct contour_2t
    {
+       contour_2t(std::vector<point_2t<Scalar>> const & vec)
+       {
+           boost::copy(vec, std::back_inserter(pts_));
+       }
+
       contour_2t(contour_2t const &)              = delete;
       contour_2t& operator = (contour_2t const &) = delete;
 

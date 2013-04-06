@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cg/primitives/point.h"
+#include <cg/primitives/contour.h>
 #include <boost/numeric/interval.hpp>
 #include <gmpxx.h>
 
@@ -85,5 +86,11 @@ namespace cg
          return *v;
 
       return *orientation_r()(a, b, c);
+   }
+
+   template<class Scalar>
+   orientation_t contour_orientation(cg::contour_2t<Scalar> const & con)
+   {
+       return cg::orientation(con[0], con[1], con[2]);
    }
 }
