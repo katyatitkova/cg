@@ -60,6 +60,18 @@ namespace cg
       return !(a == b);
    }
 
+   template <class Scalar>
+   bool operator <= (point_2t<Scalar> const & a, point_2t<Scalar> const & b)
+   {
+      return a < b || a == b;
+   }
+
+   template <class Scalar>
+   bool operator >= (point_2t<Scalar> const & a, point_2t<Scalar> const & b)
+   {
+      return a > b || a == b;
+   }
+
    // в этом месте возможно переполнение!
    template <class Scalar>
    vector_2t<Scalar> const operator - (point_2t<Scalar> const & a, point_2t<Scalar> const & b)

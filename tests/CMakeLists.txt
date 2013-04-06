@@ -15,6 +15,7 @@ link_directories(${Boost_LIBRARYDIR})
 set(SOURCES
    orientation.cpp
    intersect.cpp
+   segment_intersect.cpp
 )
 
 add_executable(cg-test ${SOURCES} intersect_slow.h)

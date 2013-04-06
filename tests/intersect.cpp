@@ -8,7 +8,7 @@
 #include "random_utils.h"
 #include <cg/common/intersect.h>
 
-TEST(intersect_test, intersect_accuracy)
+TEST(intersect_test, DISABLED_intersect_accuracy)
 {
     boost::random::mt19937 gen;
     boost::random::uniform_real_distribution<> distr(-(1LL << 53), (1LL << 53));
@@ -26,7 +26,7 @@ TEST(intersect_test, intersect_accuracy)
     EXPECT_EQ(res, res_slow);
 }
 
-TEST(intersect_test, intersect_speed)
+TEST(intersect_test, DISABLED_intersect_speed)
 {
     boost::random::mt19937 gen;
     boost::random::uniform_real_distribution<> distr(-(1LL << 53), (1LL << 53));
