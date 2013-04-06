@@ -1,41 +1,33 @@
 #include <gtest/gtest.h>
-#include <cg/operations/segment_intersect.h>
+#include <cg/operations/intersections.h>
 
-TEST(intersect, segments_are_intersecting)
+TEST(intersections, segment_intersects_segment)
 {
-    EXPECT_EQ(cg::segments_are_intersecting(cg::segment_2t<double>(cg::point_2(0, 0), cg::point_2(1, 1)),
+    EXPECT_EQ(cg::segment_intersects_segment(cg::segment_2t<double>(cg::point_2(0, 0), cg::point_2(1, 1)),
                                             cg::segment_2t<double>(cg::point_2(1, 0), cg::point_2(0, 1))), true);
-    EXPECT_EQ(cg::segments_are_intersecting(cg::segment_2t<double>(cg::point_2(0, 0), cg::point_2(0, 1)),
+    EXPECT_EQ(cg::segment_intersects_segment(cg::segment_2t<double>(cg::point_2(0, 0), cg::point_2(0, 1)),
                                             cg::segment_2t<double>(cg::point_2(0, 0.5), cg::point_2(0, 1))), true);
-    EXPECT_EQ(cg::segments_are_intersecting(cg::segment_2t<double>(cg::point_2(0, 0), cg::point_2(0, 1)),
+    EXPECT_EQ(cg::segment_intersects_segment(cg::segment_2t<double>(cg::point_2(0, 0), cg::point_2(0, 1)),
                                             cg::segment_2t<double>(cg::point_2(1, 0), cg::point_2(1, 1))), false);
-    EXPECT_EQ(cg::segments_are_intersecting(cg::segment_2t<double>(cg::point_2(0, 0), cg::point_2(0, 1)),
+    EXPECT_EQ(cg::segment_intersects_segment(cg::segment_2t<double>(cg::point_2(0, 0), cg::point_2(0, 1)),
                                             cg::segment_2t<double>(cg::point_2(0, 1), cg::point_2(1, 1))), true);
-    EXPECT_EQ(cg::segments_are_intersecting(cg::segment_2t<double>(cg::point_2(0, 0), cg::point_2(2, 2)),
+    EXPECT_EQ(cg::segment_intersects_segment(cg::segment_2t<double>(cg::point_2(0, 0), cg::point_2(2, 2)),
                                             cg::segment_2t<double>(cg::point_2(3, 3), cg::point_2(3, 2))), false);
 }
 
-TEST(intersect, point_in_triangle)
-{
-    EXPECT_EQ(cg::point_in_triangle(cg::point_2(0.5, 0), cg::point_2(1, 1), cg::point_2(-1, -1), cg::point_2(1, -1)), true);
-    EXPECT_EQ(cg::point_in_triangle(cg::point_2(0, 0), cg::point_2(1, 1), cg::point_2(-1, -1), cg::point_2(1, -1)), true);
-    EXPECT_EQ(cg::point_in_triangle(cg::point_2(3, 3), cg::point_2(1, 1), cg::point_2(-1, -1), cg::point_2(-1, 1)), false);
-    EXPECT_EQ(cg::point_in_triangle(cg::point_2(1, 1), cg::point_2(1, 1), cg::point_2(-1, -1), cg::point_2(-1, 1)), true);
-}
-
-TEST(intersect, segment_and_triangle)
+TEST(intersections, segment_intersects_triangle)
 {
     EXPECT_EQ(cg::segment_intersects_triangle(cg::segment_2t<double>(cg::point_2(0, 0), cg::point_2(2, 2)),
-                                              cg::point_2(0, 2), cg::point_2(-2, -2), cg::point_2(2, -2)), true);
+                                              cg::triangle_2t<double>(cg::point_2(0, 2), cg::point_2(-2, -2), cg::point_2(2, -2))), true);
     EXPECT_EQ(cg::segment_intersects_triangle(cg::segment_2t<double>(cg::point_2(2, 2), cg::point_2(5, 5)),
-                                              cg::point_2(0, 2), cg::point_2(-2, -2), cg::point_2(2, -2)), false);
+                                              cg::triangle_2t<double>(cg::point_2(0, 2), cg::point_2(-2, -2), cg::point_2(2, -2))), false);
     EXPECT_EQ(cg::segment_intersects_triangle(cg::segment_2t<double>(cg::point_2(0, 0), cg::point_2(0, -1)),
-                                              cg::point_2(0, 2), cg::point_2(-2, -2), cg::point_2(2, -2)), true);
+                                              cg::triangle_2t<double>(cg::point_2(0, 2), cg::point_2(-2, -2), cg::point_2(2, -2))), true);
     EXPECT_EQ(cg::segment_intersects_triangle(cg::segment_2t<double>(cg::point_2(2, 2), cg::point_2(3, 3)),
-                                              cg::point_2(0, 0), cg::point_2(0, 10), cg::point_2(10, 0)), true);
+                                              cg::triangle_2t<double>(cg::point_2(0, 0), cg::point_2(0, 10), cg::point_2(10, 0))), true);
 }
 
-TEST(intersect, segment_and_rectangle)
+TEST(intersections, segment_intersects_rectangle)
 {
     EXPECT_EQ(cg::segment_intersects_rectangle(cg::segment_2t<double>(cg::point_2(2, 2), cg::point_2(4, 2)),
                                                cg::rectangle_2t<double>(
@@ -53,3 +45,4 @@ TEST(intersect, segment_and_rectangle)
                                                cg::rectangle_2t<double>(
                                                    cg::range_t<double>(1, 6), cg::range_t<double>(1, 4))), false);
 }
+
