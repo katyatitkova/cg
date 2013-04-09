@@ -1,46 +1,35 @@
 #pragma once
 
-#include <stdexcept>
-#include <boost/lexical_cast.hpp>
+#include <cg/primitives/point.h>
+#include <cg/primitives/segment.h>
 
-#include "point.h"
+#include <array>
 
 namespace cg
 {
-template<class Scalar>
-struct triangle_2t
-{
-    triangle_2t() {};
+   template <class Scalar>
+   struct triangle_2t;
 
-    triangle_2t(cg::point_2t<Scalar> p1, cg::point_2t<Scalar> p2, cg::point_2t<Scalar> p3):
-        p1(p1), p2(p2), p3(p3)
-    {}
+   typedef triangle_2t<double> triangle_2;
 
-    point_2t<Scalar> const & operator[] (size_t i) const
-    {
-        switch (i)
-        {
-        case 0: return p1;
-        case 1: return p2;
-        case 2: return p3;
-        default:
-            throw std::logic_error("invalid index: " + boost::lexical_cast<std::string>(i));
-        }
-    }
+   template <class Scalar>
+   struct triangle_2t
+   {
+      triangle_2t() {}
+      triangle_2t(point_2 const & a, point_2 const & b, point_2 const & c)
+      {
+         // gcc 4.2
+         pts_[0] = a;
+         pts_[1] = b;
+         pts_[2] = c;
+      }
 
-    point_2t<Scalar> & operator[] (size_t i)
-    {
-        switch (i)
-        {
-        case 0: return p1;
-        case 1: return p2;
-        case 2: return p3;
-        default:
-            throw std::logic_error("invalid index: " + boost::lexical_cast<std::string>(i));
-        }
-    }
+      point_2t<Scalar> &         operator [] (size_t id)       { return pts_[id]; }
+      point_2t<Scalar> const &   operator [] (size_t id) const { return pts_[id]; }
 
-private:
-    point_2t<Scalar> p1, p2, p3;
-};
+      segment_2t<Scalar> side(size_t id) const { return segment_2t<Scalar>(pts_[(id + 1) % 3], pts_[(id + 2) % 3]); }
+
+   private:
+      std::array<point_2t<Scalar>, 3 > pts_;
+   };
 }
