@@ -4,7 +4,7 @@
 #include <cg/primitives/triangle.h>
 #include <cg/primitives/segment.h>
 
-#include <cg/operations/orientation.h>
+#include <cg/operations/orientation/points_orientation.h>
 #include <cg/operations/contains/segment_point.h>
 #include <algorithm>
 

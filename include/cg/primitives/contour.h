@@ -9,6 +9,14 @@
 
 namespace cg
 {
+
+    enum orientation_contour_t
+    {
+        CG_NULL = -1,
+        CG_COUNTERCLOCKWISE = 0,
+        CG_CLOCKWISE = 1
+    };
+
    template <class Scalar>
    struct contour_2t;
 
@@ -19,11 +27,13 @@ namespace cg
    template <class Scalar>
    struct contour_2t
    {
-      contour_2t(std::vector<point_2t<Scalar> > const& pts) : pts_(pts)
-      {}
+      contour_2t(std::vector<point_2t<Scalar>> const& pts) : pts_(pts)
+      {
+          orientation_ = CG_NULL;
+      }
 
-      typedef typename std::vector<point_2t<Scalar> >::const_iterator const_iterator;
-      typedef typename common::range_circulator<contour_2t<Scalar> > circulator_t;
+      typedef typename std::vector<point_2t<Scalar>>::const_iterator const_iterator;
+      typedef typename common::range_circulator<contour_2t<Scalar>> circulator_t;
 
       const_iterator begin() const
       {
@@ -37,12 +47,12 @@ namespace cg
 
       circulator_t circulator() const
       {
-         return common::range_circulator<contour_2t<Scalar> >(*this);
+         return common::range_circulator<contour_2t<Scalar>>(*this);
       }
 
       circulator_t circulator(const_iterator itr) const
       {
-         return common::range_circulator<contour_2t<Scalar> >(*this, itr);
+         return common::range_circulator<contour_2t<Scalar>>(*this, itr);
       }
 
       size_t vertices_num() const
@@ -60,10 +70,21 @@ namespace cg
          return pts_[idx];
       }
 
+      cg::orientation_contour_t get_orientation()
+      {
+          return orientation_;
+      }
+
+      void set_orientation(cg::orientation_contour_t orient)
+      {
+          orientation_ = orient;
+      }
+
    private:
       friend struct contour_builder_type;
 
-      std::vector<point_2t<Scalar> > pts_;
+      std::vector<point_2t<Scalar>> pts_;
+      cg::orientation_contour_t orientation_;
    };
 
    typedef common::range_circulator<contour_2f> contour_circulator;

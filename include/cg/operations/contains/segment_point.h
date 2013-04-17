@@ -4,7 +4,7 @@
 #include <cg/primitives/segment.h>
 #include <cg/primitives/range.h>
 
-#include <cg/operations/orientation.h>
+#include <cg/operations/orientation/points_orientation.h>
 
 namespace cg
 {

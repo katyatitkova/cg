@@ -1,9 +1,6 @@
 #pragma once
 
-#include <algorithm>
-
 #include <cg/primitives/point.h>
-#include <cg/primitives/contour.h>
 #include <boost/numeric/interval.hpp>
 #include <gmpxx.h>
 
@@ -96,26 +93,5 @@ namespace cg
          return *v;
 
       return *orientation_r()(a, b, c);
-   }
-
-   enum orientation_contour_t
-   {
-       CG_COUNTERCLOCKWISE = 0,
-       CG_CLOCKWISE = 1
-   };
-
-   template<class Scalar>
-   inline orientation_contour_t orientation(cg::contour_2t<Scalar> const & contour)
-   {
-       auto circulator = contour.circulator(std::min_element(contour.begin(), contour.end()));
-       point_2t<Scalar> const & point = *circulator;
-       point_2t<Scalar> const & prev = *(--circulator);
-       ++circulator;
-       point_2t<Scalar> const & next = *(++circulator);
-       if (orientation(point, prev, next) == CG_RIGHT)
-       {
-           return CG_COUNTERCLOCKWISE;
-       }
-       return CG_CLOCKWISE;
    }
 }
