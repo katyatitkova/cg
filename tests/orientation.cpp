@@ -4,13 +4,16 @@
 #include <CGAL/enum.h>
 
 #include <cg/operations/orientation.h>
+#include <misc/random_utils.h>
+
 #include "random_utils.h"
 #include <cg/primitives/contour.h>
 
+using namespace util;
+
 TEST(orientation, uniform_line)
 {
-   std::mt19937 gen;
-   std::uniform_real_distribution<> distr(-(1LL << 53), (1LL << 53));
+   uniform_random_real<double, std::mt19937> distr(-(1LL << 53), (1LL << 53));
 
    std::vector<cg::point_2> pts = uniform_points(1000);
    for (size_t l = 0, ln = 1; ln < pts.size(); l = ln++)
@@ -23,7 +26,7 @@ TEST(orientation, uniform_line)
 
       for (size_t k = 0; k != 1000; ++k)
       {
-         double t = distr(gen);
+         double t = distr();
          cg::point_2 c = a + t * (b - a);
          CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel> c_cgal(a.x + t * (b.x - a.x), a.y + t * (b.y - a.y));
 

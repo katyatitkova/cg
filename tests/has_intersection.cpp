@@ -2,6 +2,7 @@
 
 #include <cg/operations/has_intersection/segment_segment.h>
 #include <cg/operations/has_intersection/triangle_segment.h>
+#include <cg/operations/has_intersection/rectangle_segment.h>
 
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/intersections.h>
@@ -77,4 +78,24 @@ TEST(has_intersection, triangle_segment)
                                      (CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(seg[0], seg[1]),
                                       CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(seg[2], seg[3]))));
     }
+}
+
+TEST(has_intersection, DISABLE_rectangle_segment)
+{
+   using cg::point_2;
+   using cg::segment_2;
+   using cg::rectangle_2;
+   using cg::range;
+
+   rectangle_2 r(range(0.0, 4.0), range(0.0, 4.0));
+   EXPECT_FALSE(cg::has_intersection(r, segment_2(point_2(-2.0, -2.0), point_2(-1.0, -1.0))));
+   EXPECT_TRUE(cg::has_intersection(r, segment_2(point_2(-1.0, -1.0), point_2(1.0, 1.0))));
+   EXPECT_TRUE(cg::has_intersection(r, segment_2(point_2(-2.0, -2.0), point_2(0.0, 0.0))));
+
+   range a(0, 2), b(0, 2);
+   EXPECT_TRUE(cg::has_intersection(rectangle_2(a, b), segment_2(point_2(-2, 2), point_2(2, 2))));
+   EXPECT_TRUE(cg::has_intersection(rectangle_2(a, b), segment_2(point_2(1, 1), point_2(1, 1.5))));
+   EXPECT_FALSE(cg::has_intersection(rectangle_2(a, b), segment_2(point_2(0, 3), point_2(3, 3))));
+   EXPECT_TRUE(cg::has_intersection(rectangle_2(a, b), segment_2(point_2(-1, -1), point_2(3, 3))));
+   EXPECT_TRUE(cg::has_intersection(rectangle_2(a, b), segment_2(point_2(1, -1), point_2(1, 3))));
 }
