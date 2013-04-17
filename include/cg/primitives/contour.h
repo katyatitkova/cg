@@ -29,6 +29,7 @@ namespace cg
       {
          return pts_.begin();
       }
+
       const_iterator end() const
       {
          return pts_.end();

@@ -1,6 +1,8 @@
 #pragma once
 
-#include "cg/primitives/point.h"
+#include <algorithm>
+
+#include <cg/primitives/point.h>
 #include <cg/primitives/contour.h>
 #include <boost/numeric/interval.hpp>
 #include <gmpxx.h>
@@ -13,7 +15,9 @@ namespace cg
    {
       CG_RIGHT = -1,
       CG_COLLINEAR = 0,
-      CG_LEFT = 1
+      CG_LEFT = 1,
+      CG_CLOCKWISE = 2,
+      CG_COUNTERCLOCKWISE = 3
    };
 
    inline bool opposite(orientation_t a, orientation_t b)
@@ -97,8 +101,17 @@ namespace cg
    }
 
    template<class Scalar>
-   orientation_t contour_orientation(cg::contour_2t<Scalar> const & con)
+   inline orientation_t orientation(cg::contour_2t<Scalar> const & contour)
    {
-       return cg::orientation(con[0], con[1], con[2]);
+       auto circulator = contour.circulator(std::min_element(contour.begin(), contour.end()));
+       point_2t<Scalar> const & point = *circulator;
+       point_2t<Scalar> const & prev = *(--circulator);
+       ++circulator;
+       point_2t<Scalar> const & next = *(++circulator);
+       if (orientation(point, prev, next) == CG_RIGHT)
+       {
+           return CG_COUNTERCLOCKWISE;
+       }
+       return CG_CLOCKWISE;
    }
 }

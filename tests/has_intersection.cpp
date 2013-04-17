@@ -80,7 +80,7 @@ TEST(has_intersection, DISABLED_triangle_segment)
     }
 }
 
-TEST(has_intersection, rectangle_segment)
+TEST(has_intersection, DISABLED_rectangle_segment)
 {
     std::mt19937 gen;
     std::uniform_real_distribution<> distr(-5.0, 5.0);

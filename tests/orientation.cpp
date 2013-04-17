@@ -2,6 +2,8 @@
 
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/enum.h>
+#include <CGAL/Polygon_2.h>
+#include <CGAL/Polygon_2_algorithms.h>
 
 #include <cg/operations/orientation.h>
 #include <misc/random_utils.h>
@@ -48,4 +50,31 @@ TEST(orientation, DISABLED_uniform_line)
          EXPECT_EQ(cg::orientation(a, b, c), cgal_res);
       }
    }
+}
+
+TEST(orientation, contour)
+{
+    uniform_random_int<int, std::mt19937> size_distr(5, 1000);
+    for (int k = 0; k < 10000; ++k)
+    {
+        std::vector<cg::point_2> pts = uniform_points(size_distr());
+        cg::contour_2 con(pts);
+        int res = 0;
+        if (cg::orientation(con) == cg::CG_CLOCKWISE)
+        {
+            res = 1;
+        }
+        std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_pts;
+        for (size_t i = 0; i < pts.size(); ++i)
+        {
+            cgal_pts.push_back(CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(pts[i].x, pts[i].y));
+        }
+        CGAL::Polygon_2<CGAL::Exact_predicates_exact_constructions_kernel> pol(cgal_pts.begin(), cgal_pts.end());
+        int cgal_res = 0;
+        if (CGAL::orientation_2(pol.vertices_begin(), pol.vertices_end()) == CGAL::CLOCKWISE)
+        {
+            cgal_res = 1;
+        }
+        EXPECT_EQ(res, cgal_res);
+    }
 }
