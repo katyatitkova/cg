@@ -10,7 +10,7 @@
 #include <array>
 #include <limits>
 
-TEST(contains, DISABLED_triangle_point)
+TEST(contains, triangle_point)
 {
     std::mt19937 gen;
     std::uniform_real_distribution<> distr(-5.0, 5.0);
@@ -26,6 +26,10 @@ TEST(contains, DISABLED_triangle_point)
         for (size_t i = p.size(); i < tr.size(); ++i)
         {
             tr[i] = distr(gen);
+        }
+        if (cg::orientation(cg::point_2(tr[0], tr[1]), cg::point_2(tr[2], tr[3]), cg::point_2(tr[4], tr[5])) == cg::CG_COLLINEAR)
+        {
+            tr[0] += std::numeric_limits<double>::epsilon();
         }
         CGAL::Triangle_2<CGAL::Exact_predicates_exact_constructions_kernel> triangle(
                     CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(tr[0], tr[1]),

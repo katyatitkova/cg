@@ -52,7 +52,7 @@ TEST(orientation, DISABLED_uniform_line)
    }
 }
 
-TEST(orientation, contour)
+TEST(orientation, DISABLED_contour)
 {
     uniform_random_int<int, std::mt19937> size_distr(5, 1000);
     for (int k = 0; k < 10000; ++k)

@@ -51,7 +51,7 @@ TEST(has_intersection, DISABLED_segment_segment)
     }
 }
 
-TEST(has_intersection, DISABLED_triangle_segment)
+TEST(has_intersection, triangle_segment)
 {
     std::mt19937 gen;
     std::uniform_real_distribution<> distr(-5.0, 5.0);
@@ -67,6 +67,10 @@ TEST(has_intersection, DISABLED_triangle_segment)
         for (size_t i = seg.size(); i < tr.size(); ++i)
         {
             tr[i] = distr(gen);
+        }
+        if (cg::orientation(cg::point_2(tr[0], tr[1]), cg::point_2(tr[2], tr[3]), cg::point_2(tr[4], tr[5])) == cg::CG_COLLINEAR)
+        {
+            tr[0] += std::numeric_limits<double>::epsilon();
         }
         EXPECT_EQ(cg::has_intersection(cg::triangle_2(cg::point_2(tr[0], tr[1]), cg::point_2(tr[2], tr[3]), cg::point_2(tr[4], tr[5])),
                                        cg::segment_2(cg::point_2(seg[0], seg[1]), cg::point_2(seg[2], seg[3]))),
