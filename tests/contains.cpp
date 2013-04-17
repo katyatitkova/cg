@@ -10,7 +10,7 @@
 #include <array>
 #include <limits>
 
-TEST(contains, triangle_point)
+TEST(contains, DISABLED_triangle_point)
 {
     std::mt19937 gen;
     std::uniform_real_distribution<> distr(-5.0, 5.0);
@@ -50,7 +50,7 @@ TEST(contains, triangle_point)
     }
 }
 
-TEST(contains, segment_point)
+TEST(contains, DISABLED_segment_point)
 {
     std::mt19937 gen;
     std::uniform_real_distribution<> distr(-5.0, 5.0);

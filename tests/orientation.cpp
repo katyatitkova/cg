@@ -11,7 +11,7 @@
 
 using namespace util;
 
-TEST(orientation, uniform_line)
+TEST(orientation, DISABLED_uniform_line)
 {
    uniform_random_real<double, std::mt19937> distr(-(1LL << 53), (1LL << 53));
 

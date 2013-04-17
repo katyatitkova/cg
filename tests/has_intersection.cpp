@@ -11,7 +11,7 @@
 #include <array>
 #include <limits>
 
-TEST(has_intersection, segment_segment)
+TEST(has_intersection, DISABLED_segment_segment)
 {
     std::mt19937 gen;
     std::uniform_real_distribution<> distr(-5.0, 5.0);
@@ -51,7 +51,7 @@ TEST(has_intersection, segment_segment)
     }
 }
 
-TEST(has_intersection, triangle_segment)
+TEST(has_intersection, DISABLED_triangle_segment)
 {
     std::mt19937 gen;
     std::uniform_real_distribution<> distr(-5.0, 5.0);
@@ -80,7 +80,7 @@ TEST(has_intersection, triangle_segment)
     }
 }
 
-TEST(has_intersection, DISABLE_rectangle_segment)
+TEST(has_intersection, rectangle_segment)
 {
    using cg::point_2;
    using cg::segment_2;
