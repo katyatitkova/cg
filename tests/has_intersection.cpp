@@ -82,20 +82,40 @@ TEST(has_intersection, DISABLED_triangle_segment)
 
 TEST(has_intersection, rectangle_segment)
 {
-   using cg::point_2;
-   using cg::segment_2;
-   using cg::rectangle_2;
-   using cg::range;
-
-   rectangle_2 r(range(0.0, 4.0), range(0.0, 4.0));
-   EXPECT_FALSE(cg::has_intersection(r, segment_2(point_2(-2.0, -2.0), point_2(-1.0, -1.0))));
-   EXPECT_TRUE(cg::has_intersection(r, segment_2(point_2(-1.0, -1.0), point_2(1.0, 1.0))));
-   EXPECT_TRUE(cg::has_intersection(r, segment_2(point_2(-2.0, -2.0), point_2(0.0, 0.0))));
-
-   range a(0, 2), b(0, 2);
-   EXPECT_TRUE(cg::has_intersection(rectangle_2(a, b), segment_2(point_2(-2, 2), point_2(2, 2))));
-   EXPECT_TRUE(cg::has_intersection(rectangle_2(a, b), segment_2(point_2(1, 1), point_2(1, 1.5))));
-   EXPECT_FALSE(cg::has_intersection(rectangle_2(a, b), segment_2(point_2(0, 3), point_2(3, 3))));
-   EXPECT_TRUE(cg::has_intersection(rectangle_2(a, b), segment_2(point_2(-1, -1), point_2(3, 3))));
-   EXPECT_TRUE(cg::has_intersection(rectangle_2(a, b), segment_2(point_2(1, -1), point_2(1, 3))));
+    std::mt19937 gen;
+    std::uniform_real_distribution<> distr(-5.0, 5.0);
+    std::array<double, 4> rect;
+    std::array<double, 4> seg;
+    for (int k = 0; k < 10000; ++k)
+    {
+        for (size_t i = 0; i < rect.size(); ++i)
+        {
+            rect[i] = distr(gen);
+            seg[i] = distr(gen);
+        }
+        if (rect[1] < rect[0])
+        {
+            std::swap(rect[1], rect[0]);
+        }
+        if (rect[1] == rect[0])
+        {
+            rect[1] += std::numeric_limits<double>::epsilon();
+        }
+        if (rect[3] < rect[2])
+        {
+            std::swap(rect[3], rect[2]);
+        }
+        if (rect[3] == rect[2])
+        {
+            rect[3] += std::numeric_limits<double>::epsilon();
+        }
+        EXPECT_EQ(cg::has_intersection(cg::rectangle_2(cg::range(rect[0], rect[1]), cg::range(rect[2], rect[3])),
+                                       cg::segment_2(cg::point_2(seg[0], seg[1]), cg::point_2(seg[2], seg[3]))),
+                  CGAL::do_intersect(CGAL::Iso_rectangle_2<CGAL::Exact_predicates_exact_constructions_kernel>
+                                     (CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(rect[0], rect[2]),
+                                      CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(rect[1], rect[3])),
+                                     CGAL::Segment_2<CGAL::Exact_predicates_exact_constructions_kernel>
+                                     (CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(seg[0], seg[1]),
+                                      CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(seg[2], seg[3]))));
+    }
 }
