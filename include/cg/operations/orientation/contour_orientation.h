@@ -10,23 +10,23 @@
 namespace cg
 {
    template<class Scalar>
-   inline orientation_contour_t orientation(cg::contour_2t<Scalar> & contour)
+   inline orientation_contour_t orientation(contour_2t<Scalar> & c)
    {
-       if (contour.get_orientation() != cg::CG_NULL)
+       if (c.get_orientation() != CG_NULL)
        {
-           return contour.get_orientation();
+           return c.get_orientation();
        }
-       auto circulator = contour.circulator(std::min_element(contour.begin(), contour.end()));
-       cg::point_2t<Scalar> const & point = *circulator;
-       cg::point_2t<Scalar> const & prev = *(--circulator);
+       auto circulator = c.circulator(std::min_element(c.begin(), c.end()));
+       point_2t<Scalar> const & point = *circulator;
+       point_2t<Scalar> const & prev = *(--circulator);
        ++circulator;
-       cg::point_2t<Scalar> const & next = *(++circulator);
-       if (orientation(point, prev, next) == cg::CG_RIGHT)
+       point_2t<Scalar> const & next = *(++circulator);
+       if (orientation(point, prev, next) == CG_RIGHT)
        {
-           contour.set_orientation(CG_COUNTERCLOCKWISE);
+           c.set_orientation(CG_COUNTERCLOCKWISE);
            return CG_COUNTERCLOCKWISE;
        }
-       contour.set_orientation(CG_CLOCKWISE);
+       c.set_orientation(CG_CLOCKWISE);
        return CG_CLOCKWISE;
    }
 }

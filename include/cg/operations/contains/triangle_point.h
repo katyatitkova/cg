@@ -18,14 +18,14 @@ namespace cg
       if (to == CG_COLLINEAR)
       {
          segment_2 s(*std::min_element(&t[0], &t[0] + 3),
-                     *std::max_element(&t[0], &t[0] + 3));
+               *std::max_element(&t[0], &t[0] + 3));
 
          return contains(s, q);
       }
 
       for (size_t l = 0, lp = 2; l != 3; lp = l++)
          if (opposite(orientation(t[lp], t[l], q), to))
-             return false;
+            return false;
 
       return true;
    }

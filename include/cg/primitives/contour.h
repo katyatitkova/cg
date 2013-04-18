@@ -10,12 +10,12 @@
 namespace cg
 {
 
-    enum orientation_contour_t
-    {
-        CG_NULL = -1,
-        CG_COUNTERCLOCKWISE = 0,
-        CG_CLOCKWISE = 1
-    };
+   enum orientation_contour_t
+   {
+      CG_NULL = -1,
+      CG_COUNTERCLOCKWISE = 0,
+      CG_CLOCKWISE = 1
+   };
 
    template <class Scalar>
    struct contour_2t;
@@ -29,7 +29,7 @@ namespace cg
    {
       contour_2t(std::vector<point_2t<Scalar>> const& pts) : pts_(pts)
       {
-          orientation_ = CG_NULL;
+         orientation_ = CG_NULL;
       }
 
       typedef typename std::vector<point_2t<Scalar>>::const_iterator const_iterator;
@@ -72,12 +72,12 @@ namespace cg
 
       cg::orientation_contour_t get_orientation()
       {
-          return orientation_;
+         return orientation_;
       }
 
       void set_orientation(cg::orientation_contour_t orient)
       {
-          orientation_ = orient;
+         orientation_ = orient;
       }
 
    private:
