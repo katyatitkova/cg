@@ -2,13 +2,20 @@
 
 #include <cg/operations/contains/segment_point.h>
 #include <cg/operations/contains/triangle_point.h>
+#include <cg/operations/contains/contour_point.h>
 
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/enum.h>
+#include <CGAL/Polygon_2.h>
+#include <CGAL/convex_hull_2.h>
 
 #include <random>
 #include <array>
 #include <limits>
+
+#include <misc/random_utils.h>
+
+#include "random_utils.h"
 
 TEST(contains, DISABLED_triangle_point)
 {
@@ -81,5 +88,34 @@ TEST(contains, DISABLED_segment_point)
          p[0] = seg[0] * (1 + std::numeric_limits<double>::epsilon());
          p[1] = seg[1] * (1 + std::numeric_limits<double>::epsilon());
       }
+   }
+}
+
+TEST(contains, contour_point)
+{
+   util::uniform_random_int<int, std::mt19937> size_distr(5, 1000);
+   std::mt19937 gen;
+   std::uniform_real_distribution<> distr(-100.0, 100.0);
+   for (int k = 0; k < 10000; ++k)
+   {
+      std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_pts = uniform_cgal_points(size_distr());
+      CGAL::Polygon_2<CGAL::Exact_predicates_exact_constructions_kernel> cgal_pol;
+      CGAL::convex_hull_2(cgal_pts.begin(), cgal_pts.end(), std::back_inserter(cgal_pol));
+      std::vector<cg::point_2> pts;
+      for (size_t i = 0; i < cgal_pol.size(); ++i)
+      {
+         pts.push_back(cg::point_2(CGAL::to_double(cgal_pol[i].x()), CGAL::to_double(cgal_pol[i].y())));
+      }
+      cg::contour_2 pol(pts);
+      double x = distr(gen);
+      double y = distr(gen);
+      bool cgal_res = false;
+      if (CGAL::bounded_side_2(cgal_pol.vertices_begin(), cgal_pol.vertices_end(),
+                               CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(x, y)) == CGAL::ON_BOUNDED_SIDE)
+      {
+         cgal_res = true;
+      }
+      bool res = cg::convex_contains(pol, cg::point_2(x, y));
+      EXPECT_EQ(res, cgal_res);
    }
 }
