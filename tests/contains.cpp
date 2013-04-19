@@ -91,7 +91,7 @@ TEST(contains, DISABLED_segment_point)
    }
 }
 
-TEST(contains, convex_contour_point)
+TEST(contains, DISABLED_convex_contour_point)
 {
    util::uniform_random_int<int, std::mt19937> size_distr(1000, 100000);
    std::mt19937 gen;
