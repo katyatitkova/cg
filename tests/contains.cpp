@@ -93,7 +93,7 @@ TEST(contains, DISABLED_segment_point)
 
 TEST(contains, contour_point)
 {
-   util::uniform_random_int<int, std::mt19937> size_distr(5, 1000);
+   util::uniform_random_int<int, std::mt19937> size_distr(1000, 100000);
    std::mt19937 gen;
    std::uniform_real_distribution<> distr(-100.0, 100.0);
    for (int k = 0; k < 10000; ++k)
@@ -107,6 +107,7 @@ TEST(contains, contour_point)
          pts.push_back(cg::point_2(CGAL::to_double(cgal_pol[i].x()), CGAL::to_double(cgal_pol[i].y())));
       }
       cg::contour_2 pol(pts);
+      s += (long long) pts.size();
       double x = distr(gen);
       double y = distr(gen);
       bool cgal_res = false;
