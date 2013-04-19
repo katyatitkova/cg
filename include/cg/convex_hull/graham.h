@@ -2,7 +2,7 @@
 
 #include <boost/range/algorithm/sort.hpp>
 
-#include <cg/operations/orientation.h>
+#include <cg/operations/orientation/points_orientation.h>
 
 namespace cg
 {
@@ -61,12 +61,16 @@ namespace cg
 
       std::sort(p, q, [t] (point_2 const & a, point_2 const & b)
                         {
-                           switch (orientation(*t, a, b))
+                           auto orient = orientation(*t, a, b);
+                           if (orient == CG_LEFT)
                            {
-                           case CG_LEFT: return true;
-                           case CG_RIGHT: return false;
-                           case CG_COLLINEAR: return a < b;
+                              return true;
                            }
+                           if (orient == CG_RIGHT)
+                           {
+                              return false;
+                           }
+                           return a < b;
                         }
                );
 

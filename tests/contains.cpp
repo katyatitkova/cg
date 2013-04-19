@@ -91,12 +91,12 @@ TEST(contains, DISABLED_segment_point)
    }
 }
 
-TEST(contains, contour_point)
+TEST(contains, convex_contour_point)
 {
    util::uniform_random_int<int, std::mt19937> size_distr(1000, 100000);
    std::mt19937 gen;
    std::uniform_real_distribution<> distr(-100.0, 100.0);
-   for (int k = 0; k < 10000; ++k)
+   for (int k = 0; k < 1000; ++k)
    {
       std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_pts = uniform_cgal_points(size_distr());
       CGAL::Polygon_2<CGAL::Exact_predicates_exact_constructions_kernel> cgal_pol;
@@ -107,16 +107,17 @@ TEST(contains, contour_point)
          pts.push_back(cg::point_2(CGAL::to_double(cgal_pol[i].x()), CGAL::to_double(cgal_pol[i].y())));
       }
       cg::contour_2 pol(pts);
-      s += (long long) pts.size();
-      double x = distr(gen);
-      double y = distr(gen);
-      bool cgal_res = false;
-      if (CGAL::bounded_side_2(cgal_pol.vertices_begin(), cgal_pol.vertices_end(),
-                               CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(x, y)) == CGAL::ON_BOUNDED_SIDE)
+      for (int q = 0; q < 10; ++q)
       {
-         cgal_res = true;
+         double x = distr(gen);
+         double y = distr(gen);
+         bool cgal_res = false;
+         if (CGAL::bounded_side_2(cgal_pol.vertices_begin(), cgal_pol.vertices_end(),
+                                  CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(x, y)) == CGAL::ON_BOUNDED_SIDE)
+         {
+            cgal_res = true;
+         }
+         EXPECT_EQ(cg::convex_contains(pol, cg::point_2(x, y)), cgal_res);
       }
-      bool res = cg::convex_contains(pol, cg::point_2(x, y));
-      EXPECT_EQ(res, cgal_res);
    }
 }
