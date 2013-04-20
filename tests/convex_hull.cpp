@@ -21,70 +21,19 @@
 
 #include <thread>
 
-template <class FwdIter>
-bool is_convex_hull(FwdIter p, FwdIter c, FwdIter q)
+template <typename BidIter>
+struct andrew_hull_wrapper
 {
-   for (FwdIter t = boost::prior(c), s = p; s != c; t = s++)
-   {
-      for (FwdIter b = p; b != q; ++b)
-      {
-         switch (orientation(*t, *s, *b))
-         {
-         case cg::CG_RIGHT: return false;
-         case cg::CG_COLLINEAR: return collinear_are_ordered_along_line(*t, *b, *s);
-         case cg::CG_LEFT: continue;
-         }
-      }
-   }
+   static BidIter call (BidIter from, BidIter to) { return cg::andrew_hull(from, to); }
+};
 
-   return true;
-}
-
-TEST(convex_hull, DISABLED_simple)
+template <typename BidIter>
+struct graham_hull_wrapper
 {
-   using cg::point_2;
+   static BidIter call (BidIter from, BidIter to) { return cg::graham_hull(from, to); }
+};
 
-   std::vector<point_2> pts = boost::assign::list_of(point_2(0, 0))
-                                                    (point_2(1, 0))
-                                                    (point_2(0, 1))
-                                                    (point_2(2, 0))
-                                                    (point_2(0, 2))
-                                                    (point_2(3, 0));
-
-   EXPECT_TRUE(is_convex_hull(pts.begin(), cg::graham_hull(pts.begin(), pts.end()), pts.end()));
-}
-
-TEST(convex_hull, DISABLED_uniform)
-{
-   using cg::point_2;
-
-   std::vector<point_2> pts = uniform_points(10000000);
-   EXPECT_TRUE(is_convex_hull(pts.begin(), cg::graham_hull(pts.begin(), pts.end()), pts.end()));
-}
-
-TEST(convex_hull, DISABLED_cgal)
-{
-   util::uniform_random_int<int, std::mt19937> size_distr(10, 100000);
-   for (int q = 0; q < 1000; ++q)
-   {
-      std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_pts = uniform_cgal_points(size_distr());
-      std::vector<cg::point_2> pts;
-      for (size_t i = 0; i < cgal_pts.size(); ++i)
-      {
-         pts.push_back(cg::point_2(CGAL::to_double(cgal_pts[i].x()), CGAL::to_double(cgal_pts[i].y())));
-      }
-      std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_res;
-      CGAL::convex_hull_2(cgal_pts.begin(), cgal_pts.end(), std::back_inserter(cgal_res));
-      auto it_end = cg::graham_hull(pts.begin(), pts.end());
-      EXPECT_EQ(cgal_res.size(), it_end - pts.begin());
-      for (int i = 0; pts.begin() + i != it_end; ++i)
-      {
-         EXPECT_EQ(CGAL::to_double(cgal_res[i].x()), pts[i].x);
-         EXPECT_EQ(CGAL::to_double(cgal_res[i].y()), pts[i].y);
-      }
-   }
-}
-
+template <template <typename Iter> class HullAlgorithm>
 void test()
 {
    util::uniform_random_int<int, std::mt19937> size_distr(10, 10000);
@@ -101,7 +50,7 @@ void test()
       }
       cgal_res.resize(0);
       CGAL::convex_hull_2(cgal_pts.begin(), cgal_pts.end(), std::back_inserter(cgal_res));
-      auto it_end = cg::andrew_hull(pts.begin(), pts.end());
+      auto it_end = HullAlgorithm<std::vector<cg::point_2>::iterator>::call(pts.begin(), pts.end());
       EXPECT_EQ(cgal_res.size(), it_end - pts.begin());
       for (int i = 0; pts.begin() + i != it_end; ++i)
       {
@@ -111,25 +60,26 @@ void test()
    }
 }
 
-TEST(convex_hull, andrew_cgal)
+template <template <typename T> class Func>
+void thread_test()
 {
    util::uniform_random_int<int, std::mt19937> size_distr(10, 10000);
-   std::thread t1(test);
-   std::thread t2(test);
-   std::thread t3(test);
-   std::thread t4(test);
+   std::thread t1(test<Func>);
+   std::thread t2(test<Func>);
+   std::thread t3(test<Func>);
+   std::thread t4(test<Func>);
    t1.join();
    t2.join();
    t3.join();
    t4.join();
 }
 
-TEST(convex_hull, DISABLED_andrew_while_test)
+TEST(convex_hull, andrew_cgal)
 {
-   std::vector<cg::point_2> pts = boost::assign::list_of(cg::point_2(-210, 49))
-                                  (cg::point_2(178, 50))
-                                  (cg::point_2(-79, 153))
-                                  (cg::point_2(-135, 56));
-   auto it = cg::andrew_hull(pts.begin(), pts.end());
-   EXPECT_EQ(it - pts.begin(), 3);
+   thread_test<andrew_hull_wrapper>();
+}
+
+TEST(convex_hull, graham_cgal)
+{
+   thread_test<graham_hull_wrapper>();
 }
