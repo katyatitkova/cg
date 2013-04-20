@@ -60,7 +60,7 @@ TEST(convex_hull, DISABLED_uniform)
    EXPECT_TRUE(is_convex_hull(pts.begin(), cg::graham_hull(pts.begin(), pts.end()), pts.end()));
 }
 
-TEST(convex_hull, cgal)
+TEST(convex_hull, DISABLED_cgal)
 {
    util::uniform_random_int<int, std::mt19937> size_distr(10, 100000);
    for (int q = 0; q < 1000; ++q)
@@ -83,7 +83,7 @@ TEST(convex_hull, cgal)
    }
 }
 
-TEST(convex_hull, andrew_cgal)
+TEST(convex_hull, DISABLED_andrew_cgal)
 {
    util::uniform_random_int<int, std::mt19937> size_distr(10, 10000);
    for (int q = 0; q < 10000; ++q)
@@ -106,13 +106,12 @@ TEST(convex_hull, andrew_cgal)
    }
 }
 
-TEST(convex_hull, DISABLED_andrew)
+TEST(convex_hull, andrew_while_test)
 {
-   std::vector<cg::point_2> pts;
-   pts.push_back(cg::point_2(-210, 49));
-   pts.push_back(cg::point_2(178, 50));
-   pts.push_back(cg::point_2(-79, 153));
-   pts.push_back(cg::point_2(-135, 56));
+   std::vector<cg::point_2> pts = boost::assign::list_of(cg::point_2(-210, 49))
+                                  (cg::point_2(178, 50))
+                                  (cg::point_2(-79, 153))
+                                  (cg::point_2(-135, 56));
    auto it = cg::andrew_hull(pts.begin(), pts.end());
-   EXPECT_TRUE(true);
+   EXPECT_EQ(it - pts.begin(), 3);
 }
