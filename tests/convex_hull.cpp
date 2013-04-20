@@ -19,6 +19,8 @@
 #include <CGAL/convex_hull_2.h>
 #include <CGAL/Point_2.h>
 
+#include <thread>
+
 template <class FwdIter>
 bool is_convex_hull(FwdIter p, FwdIter c, FwdIter q)
 {
@@ -83,18 +85,21 @@ TEST(convex_hull, DISABLED_cgal)
    }
 }
 
-TEST(convex_hull, DISABLED_andrew_cgal)
+void test()
 {
    util::uniform_random_int<int, std::mt19937> size_distr(10, 10000);
-   for (int q = 0; q < 10000; ++q)
+   std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_pts;
+   std::vector<cg::point_2> pts;
+   std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_res;
+   for (int q = 0; q < 2500; ++q)
    {
-      std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_pts = uniform_cgal_points(size_distr());
-      std::vector<cg::point_2> pts;
+      cgal_pts = uniform_cgal_points(size_distr());
+      pts.resize(0);
       for (size_t i = 0; i < cgal_pts.size(); ++i)
       {
          pts.push_back(cg::point_2(CGAL::to_double(cgal_pts[i].x()), CGAL::to_double(cgal_pts[i].y())));
       }
-      std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_res;
+      cgal_res.resize(0);
       CGAL::convex_hull_2(cgal_pts.begin(), cgal_pts.end(), std::back_inserter(cgal_res));
       auto it_end = cg::andrew_hull(pts.begin(), pts.end());
       EXPECT_EQ(cgal_res.size(), it_end - pts.begin());
@@ -106,7 +111,20 @@ TEST(convex_hull, DISABLED_andrew_cgal)
    }
 }
 
-TEST(convex_hull, andrew_while_test)
+TEST(convex_hull, andrew_cgal)
+{
+   util::uniform_random_int<int, std::mt19937> size_distr(10, 10000);
+   std::thread t1(test);
+   std::thread t2(test);
+   std::thread t3(test);
+   std::thread t4(test);
+   t1.join();
+   t2.join();
+   t3.join();
+   t4.join();
+}
+
+TEST(convex_hull, DISABLED_andrew_while_test)
 {
    std::vector<cg::point_2> pts = boost::assign::list_of(cg::point_2(-210, 49))
                                   (cg::point_2(178, 50))
