@@ -73,7 +73,7 @@ private:
    bool set_idx (const point_2f & p)
    {
       idx_.reset();
-      float max_r;
+      float max_r = 0;
       for (size_t l = 0; l != 2; ++l)
       {
          for (size_t k = 0; k != 2; ++k) {
