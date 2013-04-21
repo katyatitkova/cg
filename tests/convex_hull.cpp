@@ -74,6 +74,7 @@ void thread_test()
    t4.join();
 }
 
+
 TEST(convex_hull, andrew_cgal)
 {
    thread_test<andrew_hull_wrapper>();
@@ -82,4 +83,52 @@ TEST(convex_hull, andrew_cgal)
 TEST(convex_hull, graham_cgal)
 {
    thread_test<graham_hull_wrapper>();
+}
+
+TEST(andrew_hull, simple)
+{
+   using cg::point_2;
+
+   std::vector<point_2> pts = boost::assign::list_of(point_2(0, 0))
+                                                    (point_2(1, 0))
+                                                    (point_2(0, 1))
+                                                    (point_2(2, 0))
+                                                    (point_2(0, 2))
+                                                    (point_2(3, 0));
+
+   EXPECT_TRUE(is_convex_hull(pts.begin(), cg::andrew_hull(pts.begin(), pts.end()), pts.end()));
+}
+
+TEST(andrew_hull, simple2)
+{
+   using cg::point_2;
+
+   std::vector<point_2> pts = boost::assign::list_of(point_2(0, 0))
+                                                    (point_2(3, 0))
+                                                    (point_2(2, 3))
+                                                    (point_2(1, 1));
+
+   EXPECT_TRUE(is_convex_hull(pts.begin(), cg::andrew_hull(pts.begin(), pts.end()), pts.end()));  
+}
+
+TEST(andrew_hull, simple3)
+{
+   using cg::point_2;
+
+   std::vector<point_2> pts = boost::assign::list_of(point_2(0, 0))
+                                                    (point_2(1, 1))
+                                                    (point_2(2, 2))
+                                                    (point_2(3, 3))
+                                                    (point_2(4, 4))
+                                                    (point_2(5, 5));
+
+   EXPECT_TRUE(is_convex_hull(pts.begin(), cg::andrew_hull(pts.begin(), pts.end()), pts.end()));
+}
+
+TEST(andrew_hull, uniform)
+{
+   using cg::point_2;
+
+   std::vector<point_2> pts = uniform_points(10000000);
+   EXPECT_TRUE(is_convex_hull(pts.begin(), cg::andrew_hull(pts.begin(), pts.end()), pts.end()));
 }

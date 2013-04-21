@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/range/algorithm/sort.hpp>
+#include <algorithm>
 
 #include <cg/operations/orientation/points_orientation.h>
 
@@ -40,7 +40,7 @@ namespace cg
          }
       }
 
-      while (orientation(*pt, *t, *b) == CG_RIGHT || (orientation(*pt, *t, *b) == CG_COLLINEAR))
+      while (pt != b && orientation(*pt, *t, *b) != CG_LEFT)
       {
          t = pt--;
       }
@@ -48,33 +48,33 @@ namespace cg
       return ++t;
    }
 
-   template <class BidIter>
-   BidIter graham_hull(BidIter p, BidIter q)
+   template <class RandIter>
+   RandIter graham_hull(RandIter p, RandIter q)
    {
       if (p == q)
          return p;
 
       std::iter_swap(p, std::min_element(p, q));
 
-      BidIter t = p++;
+      RandIter t = p++;
 
       if (p == q)
          return p;
 
       std::sort(p, q, [t] (point_2 const & a, point_2 const & b)
-                        {
-                           auto orient = orientation(*t, a, b);
-                           if (orient == CG_LEFT)
-                           {
-                              return true;
-                           }
-                           if (orient == CG_RIGHT)
-                           {
-                              return false;
-                           }
-                           return a < b;
-                        }
-               );
+      {
+         auto orient = orientation(*t, a, b);
+         if (orient == CG_LEFT)
+         {
+            return true;
+         }
+         if (orient == CG_RIGHT)
+         {
+            return false;
+         }
+         return a < b;
+      }
+      );
 
       return contour_graham_hull(t, q);
    }
