@@ -21,66 +21,73 @@
 
 #include <thread>
 
-template <typename BidIter>
-struct andrew_hull_wrapper
+namespace tests_convex_hull
 {
-   static BidIter call (BidIter from, BidIter to) { return cg::andrew_hull(from, to); }
-};
-
-template <typename BidIter>
-struct graham_hull_wrapper
-{
-   static BidIter call (BidIter from, BidIter to) { return cg::graham_hull(from, to); }
-};
-
-template <template <typename Iter> class HullAlgorithm>
-void test()
-{
-   util::uniform_random_int<int, std::mt19937> size_distr(10, 10000);
-   std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_pts;
-   std::vector<cg::point_2> pts;
-   std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_res;
-   for (int q = 0; q < 2500; ++q)
+   template <template <typename Iter> class HullAlgorithm>
+   void convex_hull_test()
    {
-      cgal_pts = uniform_cgal_points(size_distr());
-      pts.resize(0);
-      for (size_t i = 0; i < cgal_pts.size(); ++i)
+      util::uniform_random_int<int, std::mt19937> size_distr(10, 10000);
+      std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_pts;
+      std::vector<cg::point_2> pts;
+      std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_res;
+      for (int q = 0; q < 2500; ++q)
       {
-         pts.push_back(cg::point_2(CGAL::to_double(cgal_pts[i].x()), CGAL::to_double(cgal_pts[i].y())));
-      }
-      cgal_res.resize(0);
-      CGAL::convex_hull_2(cgal_pts.begin(), cgal_pts.end(), std::back_inserter(cgal_res));
-      auto it_end = HullAlgorithm<std::vector<cg::point_2>::iterator>::call(pts.begin(), pts.end());
-      EXPECT_EQ(cgal_res.size(), it_end - pts.begin());
-      for (int i = 0; pts.begin() + i != it_end; ++i)
-      {
-         EXPECT_EQ(CGAL::to_double(cgal_res[i].x()), pts[i].x);
-         EXPECT_EQ(CGAL::to_double(cgal_res[i].y()), pts[i].y);
+         cgal_pts = uniform_cgal_points(size_distr());
+         pts.resize(0);
+         for (size_t i = 0; i < cgal_pts.size(); ++i)
+         {
+            pts.push_back(cg::point_2(CGAL::to_double(cgal_pts[i].x()), CGAL::to_double(cgal_pts[i].y())));
+         }
+         cgal_res.resize(0);
+         CGAL::convex_hull_2(cgal_pts.begin(), cgal_pts.end(), std::back_inserter(cgal_res));
+         auto it_end = HullAlgorithm<std::vector<cg::point_2>::iterator>::call(pts.begin(), pts.end());
+         EXPECT_EQ(cgal_res.size(), it_end - pts.begin());
+         for (int i = 0; pts.begin() + i != it_end; ++i)
+         {
+            EXPECT_EQ(CGAL::to_double(cgal_res[i].x()), pts[i].x);
+            EXPECT_EQ(CGAL::to_double(cgal_res[i].y()), pts[i].y);
+         }
       }
    }
-}
 
-template <template <typename T> class Func>
-void thread_test()
-{
-   util::uniform_random_int<int, std::mt19937> size_distr(10, 10000);
-   std::thread t1(test<Func>);
-   std::thread t2(test<Func>);
-   std::thread t3(test<Func>);
-   std::thread t4(test<Func>);
-   t1.join();
-   t2.join();
-   t3.join();
-   t4.join();
-}
+   template <template <typename T> class Func>
+   void test()
+   {
+      std::thread t1(convex_hull_test<Func>);
+      std::thread t2(convex_hull_test<Func>);
+      std::thread t3(convex_hull_test<Func>);
+      std::thread t4(convex_hull_test<Func>);
+      t1.join();
+      t2.join();
+      t3.join();
+      t4.join();
+   }
 
+   template <typename BidIter>
+   struct andrew_hull_wrapper
+   {
+      static BidIter call (BidIter from, BidIter to)
+      {
+         return cg::andrew_hull(from, to);
+      }
+   };
 
-TEST(convex_hull, andrew_cgal)
-{
-   thread_test<andrew_hull_wrapper>();
-}
+   TEST(convex_hull, andrew_cgal)
+   {
+      test<andrew_hull_wrapper>();
+   }
 
-TEST(convex_hull, graham_cgal)
-{
-   thread_test<graham_hull_wrapper>();
+   template <typename BidIter>
+   struct graham_hull_wrapper
+   {
+      static BidIter call (BidIter from, BidIter to)
+      {
+         return cg::graham_hull(from, to);
+      }
+   };
+
+   TEST(convex_hull, graham_cgal)
+   {
+      test<graham_hull_wrapper>();
+   }
 }
