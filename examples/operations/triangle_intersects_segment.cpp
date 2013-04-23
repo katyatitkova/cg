@@ -83,7 +83,7 @@ private:
    bool set_idx (const point_2f & p)
    {
       idx_.reset();
-      float max_r;
+      float max_r = 0;
       for (size_t l = 0; l != 3; ++l)
       {
          float current_r = (p.x - t_[l].x) * (p.x - t_[l].x) + (p.y - t_[l].y) * (p.y - t_[l].y);
