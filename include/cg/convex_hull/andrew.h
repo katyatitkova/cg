@@ -11,8 +11,8 @@
 
 namespace cg
 {
-   template <class BidIter>
-   BidIter andrew_hull(BidIter p, BidIter q)
+   template <class RandIter>
+   RandIter andrew_hull(RandIter p, RandIter q)
    {
       if (q - p == 1)
       {
@@ -27,16 +27,15 @@ namespace cg
          return p;
       }
 
-      BidIter it = std::partition(p + 2, q, [p] (point_2 const & a)
-      {
-                   return (orientation(*p, *(p + 1), a) != CG_LEFT);
-   });
+      RandIter it = std::partition(p + 2, q, [p] (point_2 const & a)
+                                             {
+                                                return (orientation(*p, *(p + 1), a) != CG_LEFT);
+                                             });
 
       std::iter_swap(p + 1, it - 1);
 
       std::sort(p + 1, it);
-
-      std::sort(it, q, std::greater<point_2>());
+      std::sort(it, q, std::greater<typename std::iterator_traits<RandIter>::value_type>());
 
       return contour_graham_hull(p, q);
    }
