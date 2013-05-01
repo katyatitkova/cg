@@ -49,17 +49,13 @@ namespace cg
          double det_sup = ( a[0].x + a[1].x ) * ( b[0].y + b[1].y ) + ( a[0].y + a[1].y ) * ( b[0].x + b[1].x );
          int det_ind = 4;
          double t1_sup = a[0].x * a[1].y + a[0].y * a[1].x;
-         int t1_ind = 2;
          double t2_sup = b[0].x * b[1].y + b[0].y * b[1].x;
-         int t2_ind = 2;
 
          double xt = t1 * ( b[0].x - b[1].x ) - ( a[0].x - a[1].x ) * t2;
          double yt = t1 * ( b[0].y - b[1].y ) - ( a[0].y - a[1].y ) * t2;
 
          double xt_sup = t1_sup * ( b[0].x + b[1].x ) + ( a[0].x + a[1].x ) * t2_sup;
-         int xt_ind = 4;
          double yt_sup = t1_sup * ( b[0].y + b[1].y ) + ( a[0].y + a[1].y ) * t2_sup;
-         int yt_ind = 4;
 
          double x = ( xt ) / det;
          double y = ( yt ) / det;
@@ -143,7 +139,7 @@ namespace cg
          return boost::none;
       }
 
-      //std::cout.precision(20);
+      std::cout.precision(20);
       auto res_d = detail::intersection_d ( a, b, eps_pwr );
       if ( res_d.is_initialized() ) {
          return *res_d;

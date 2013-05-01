@@ -27,19 +27,17 @@ namespace tests_intersection_segment_segment
       void operator()(cg::point_2 & p)
       {
          ASSERT_EQ(numbers.size(), 2);
-         EXPECT_EQ(numbers[0], p.x);
-         EXPECT_EQ(numbers[1], p.y);
-         std::cout.precision(20);
-         std::cout << numbers[0] << std::endl << p.x << std::endl;
+         EXPECT_LE(abs(numbers[0] - p.x), 1e-14);
+         EXPECT_LE(abs(numbers[1] - p.y), 1e-14);
       }
 
       void operator()(cg::segment_2 & s)
       {
          ASSERT_EQ(numbers.size(), 4);
-         EXPECT_EQ(numbers[0], s[0].x);
-         EXPECT_EQ(numbers[1], s[0].y);
-         EXPECT_EQ(numbers[2], s[1].x);
-         EXPECT_EQ(numbers[3], s[1].y);
+         EXPECT_LE(abs(numbers[0] - s[0].x), 1e-14);
+         EXPECT_LE(abs(numbers[1] - s[0].y), 1e-14);
+         EXPECT_LE(abs(numbers[2] - s[1].x), 1e-14);
+         EXPECT_LE(abs(numbers[3] - s[1].y), 1e-14);
       }
 
       std::vector<double> numbers;
@@ -50,7 +48,7 @@ namespace tests_intersection_segment_segment
       util::uniform_random_real<double, std::random_device> distr(-10.0, 10.0);
       std::array<double, 4> seg1;
       std::array<double, 4> seg2;
-      for (size_t k = 0; k < 1; ++k)
+      for (size_t k = 0; k < 2500; ++k)
       {
          for (size_t i = 0; i < seg1.size(); ++i)
          {
@@ -65,7 +63,7 @@ namespace tests_intersection_segment_segment
                                                 CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(seg2[2], seg2[3])));
          auto res = cg::intersection(cg::segment_2(cg::point_2(seg1[0], seg1[1]), cg::point_2(seg1[2], seg1[3])),
                                      cg::segment_2(cg::point_2(seg2[0], seg2[1]), cg::point_2(seg2[2], seg2[3])),
-                                     -1020);
+                                     -300);
          visitor_t visitor;
          if (const CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel> *ipoint =
              CGAL::object_cast<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>>(&cgal_res))
