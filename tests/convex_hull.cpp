@@ -82,12 +82,12 @@ namespace tests_convex_hull
    };
 }
 
-TEST(convex_hull, andrew_cgal)
+TEST(convex_hull, DISABLED_andrew_cgal)
 {
    tests_convex_hull::test<tests_convex_hull::andrew_hull_wrapper>();
 }
 
-TEST(convex_hull, graham_cgal)
+TEST(convex_hull, DISABLED_graham_cgal)
 {
    tests_convex_hull::test<tests_convex_hull::graham_hull_wrapper>();
 }

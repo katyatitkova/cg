@@ -58,32 +58,34 @@ namespace tests_orientation_uniform_line
    }
 }
 
-TEST(orientation, DISABLED_not_working_contour)
+namespace tests_orientation_contour
 {
-   uniform_random_int<int, std::random_device> size_distr(5, 1000);
-   for (int k = 0; k < 10000; ++k)
+   void test()
    {
-      std::vector<cg::point_2> pts = uniform_points(size_distr());
-      cg::contour_2 con(pts);
-      std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_pts;
-      for (size_t i = 0; i < pts.size(); ++i)
+      uniform_random_int<int, std::random_device> size_distr(5, 50);
+      for (int k = 0; k < 10; ++k)
       {
-         cgal_pts.push_back(CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(pts[i].x, pts[i].y));
-      }
-      CGAL::Polygon_2<CGAL::Exact_predicates_exact_constructions_kernel> pol(cgal_pts.begin(), cgal_pts.end());
-      for (int q = 0; q < 2; ++q)
-      {
-         int res = 0;
-         if (cg::orientation(con) == cg::CG_CLOCKWISE)
+         auto pol = generate_simple_polygon(size_distr());
+         std::vector<cg::point_2> pts;
+         for (size_t i = 0; i < pol.size(); ++i)
          {
-            res = 1;
+            pts.push_back(cg::point_2(CGAL::to_double(pol[i].x()), CGAL::to_double(pol[i].y())));
          }
-         int cgal_res = 0;
-         if (CGAL::orientation_2(pol.vertices_begin(), pol.vertices_end()) == CGAL::CLOCKWISE)
+         cg::contour_2 con(pts);
+         for (int q = 0; q < 2; ++q)
          {
-            cgal_res = 1;
+            int res = 0;
+            if (cg::orientation(con) == cg::CG_CLOCKWISE)
+            {
+               res = 1;
+            }
+            int cgal_res = 0;
+            if (CGAL::orientation_2(pol.vertices_begin(), pol.vertices_end()) == CGAL::CLOCKWISE)
+            {
+               cgal_res = 1;
+            }
+            EXPECT_EQ(res, cgal_res);
          }
-         EXPECT_EQ(res, cgal_res);
       }
    }
 }
@@ -102,14 +104,20 @@ namespace tests_simple_polygon_generation
    }
 }
 
-TEST(orientation, uniform_line)
+TEST(orientation, DISABLED_uniform_line)
 {
    void (*test_case)() = tests_orientation_uniform_line::test;
    test(test_case);
 }
 
-TEST(generation, simple_polygon)
+TEST(generation, DISABLED_simple_polygon)
 {
    void (*test_case)() = tests_simple_polygon_generation::test;
+   test(test_case);
+}
+
+TEST(orientation, contour)
+{
+   void (*test_case)() = tests_orientation_contour::test;
    test(test_case);
 }
