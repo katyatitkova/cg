@@ -12,6 +12,7 @@
 
 #include <cg/convex_hull/graham.h>
 #include <cg/convex_hull/andrew.h>
+#include <cg/convex_hull/quick_hull.h>
 #include <cg/convex_hull/jarvis.h>
 
 #include <string>
@@ -23,6 +24,7 @@ enum ALGO_TYPE
 {
    GRAHAM,
    ANDREW,
+   QUICKHULL,
    JARVIS
 };
 
@@ -39,6 +41,9 @@ struct convex_hull_viewer : cg::visualization::viewer_adapter
          break;
       case ANDREW:
          type_s = "Andrew";
+         break;
+      case QUICKHULL:
+         type_s = "QuickHull";
          break;
       case JARVIS:
          type_s = "Jarvis";
@@ -79,6 +84,9 @@ struct convex_hull_viewer : cg::visualization::viewer_adapter
       case ANDREW:
          ch_size_ = std::distance(pts_.begin(), cg::andrew_hull(pts_.begin(), pts_.end()));
          break;
+      case QUICKHULL:
+         ch_size_ = std::distance(pts_.begin(), cg::quick_hull(pts_.begin(), pts_.end()));
+         break;
       case JARVIS:
          ch_size_ = std::distance(pts_.begin(), cg::jarvis_hull(pts_.begin(), pts_.end()));
          break;
@@ -106,6 +114,9 @@ int main(int argc, char ** argv)
          break;
       case 'a':
          type = ANDREW;
+         break;
+      case 'q':
+         type = QUICKHULL;
          break;
       case 'j':
          type = JARVIS;
