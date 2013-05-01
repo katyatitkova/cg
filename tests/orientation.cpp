@@ -20,7 +20,7 @@ namespace tests_orientation_uniform_line
 {
    void test()
    {
-      uniform_random_real<double, std::mt19937> distr(-(1LL << 53), (1LL << 53));
+      uniform_random_real<double, std::random_device> distr(-(1LL << 53), (1LL << 53));
 
       std::vector<cg::point_2> pts = uniform_points(250);
       for (size_t l = 0, ln = 1; ln < pts.size(); l = ln++)
@@ -58,15 +58,9 @@ namespace tests_orientation_uniform_line
    }
 }
 
-TEST(orientation, DISABLED_uniform_line)
-{
-   void (*test_case)() = tests_orientation_uniform_line::test;
-   test(test_case);
-}
-
 TEST(orientation, DISABLED_not_working_contour)
 {
-   uniform_random_int<int, std::mt19937> size_distr(5, 1000);
+   uniform_random_int<int, std::random_device> size_distr(5, 1000);
    for (int k = 0; k < 10000; ++k)
    {
       std::vector<cg::point_2> pts = uniform_points(size_distr());
@@ -106,6 +100,12 @@ namespace tests_simple_polygon_generation
          EXPECT_GE(p.size(), 3);
       }
    }
+}
+
+TEST(orientation, uniform_line)
+{
+   void (*test_case)() = tests_orientation_uniform_line::test;
+   test(test_case);
 }
 
 TEST(generation, simple_polygon)

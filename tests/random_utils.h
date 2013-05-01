@@ -16,7 +16,7 @@
 
 inline std::vector<cg::point_2> uniform_points(size_t count)
 {
-   util::uniform_random_real<double> rand(-100., 100.);
+   util::uniform_random_real<double, std::random_device> rand(-100., 100.);
 
    std::vector<cg::point_2> res(count);
 
@@ -103,7 +103,7 @@ inline CGAL::Polygon_2<CGAL::Exact_predicates_exact_constructions_kernel> genera
    std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> pts = uniform_cgal_points(size);
    CGAL::Triangulation_2<CGAL::Exact_predicates_exact_constructions_kernel> t;
    t.insert(pts.begin(), pts.end());
-   util::uniform_random_int<int, std::mt19937> size_distr(0, size - 1);
+   util::uniform_random_int<int, std::random_device> size_distr(0, size - 1);
    int n = size_distr();
    for (int q = 0; q < n; ++q)
    {

@@ -26,7 +26,7 @@ namespace tests_convex_hull
    template <template <typename Iter> class HullAlgorithm>
    void convex_hull_test()
    {
-      util::uniform_random_int<int, std::mt19937> size_distr(10, 10000);
+      util::uniform_random_int<int, std::random_device> size_distr(10, 10000);
       std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_pts;
       std::vector<cg::point_2> pts;
       std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_res;
@@ -72,11 +72,6 @@ namespace tests_convex_hull
       }
    };
 
-   TEST(convex_hull, DISABLED_andrew_cgal)
-   {
-      test<andrew_hull_wrapper>();
-   }
-
    template <typename BidIter>
    struct graham_hull_wrapper
    {
@@ -85,9 +80,14 @@ namespace tests_convex_hull
          return cg::graham_hull(from, to);
       }
    };
+}
 
-   TEST(convex_hull, DISABLED_graham_cgal)
-   {
-      test<graham_hull_wrapper>();
-   }
+TEST(convex_hull, andrew_cgal)
+{
+   tests_convex_hull::test<tests_convex_hull::andrew_hull_wrapper>();
+}
+
+TEST(convex_hull, graham_cgal)
+{
+   tests_convex_hull::test<tests_convex_hull::graham_hull_wrapper>();
 }

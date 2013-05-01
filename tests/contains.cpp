@@ -22,20 +22,19 @@ namespace tests_contains_triangle_point
 {
    void test()
    {
-      std::mt19937 gen;
-      std::uniform_real_distribution<> distr(-5.0, 5.0);
+      util::uniform_random_real<double, std::random_device> distr(-5.0, 5.0);
       std::array<double, 6> tr;
       std::array<double, 2> p;
       for (int k = 0; k < 2500; ++k)
       {
          for (size_t i = 0; i < p.size(); ++i)
          {
-            p[i] = distr(gen);
-            tr[i] = distr(gen);
+            p[i] = distr();
+            tr[i] = distr();
          }
          for (size_t i = p.size(); i < tr.size(); ++i)
          {
-            tr[i] = distr(gen);
+            tr[i] = distr();
          }
          if (cg::orientation(cg::point_2(tr[0], tr[1]), cg::point_2(tr[2], tr[3]), cg::point_2(tr[4], tr[5])) == cg::CG_COLLINEAR)
          {
@@ -65,30 +64,23 @@ namespace tests_contains_triangle_point
    }
 }
 
-TEST(contains, DISABLED_triangle_point)
-{
-   void (*test_case)() = tests_contains_triangle_point::test;
-   test(test_case);
-}
-
 namespace tests_contains_segment_point
 {
    void test()
    {
-      std::mt19937 gen;
-      std::uniform_real_distribution<> distr(-5.0, 5.0);
+      util::uniform_random_real<double, std::random_device> distr(-5.0, 5.0);
       std::array<double, 4> seg;
       std::array<double, 2> p;
       for (int k = 0; k < 2500; ++k)
       {
          for (size_t i = 0; i < p.size(); ++i)
          {
-            p[i] = distr(gen);
-            seg[i] = distr(gen);
+            p[i] = distr();
+            seg[i] = distr();
          }
          for (size_t i = p.size(); i < seg.size(); ++i)
          {
-            seg[i] = distr(gen);
+            seg[i] = distr();
          }
          CGAL::Segment_2<CGAL::Exact_predicates_exact_constructions_kernel> segment(
                   CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(seg[0], seg[1]),
@@ -104,19 +96,12 @@ namespace tests_contains_segment_point
    }
 }
 
-TEST(contains, DISABLED_segment_point)
-{
-   void (*test_case)() = tests_contains_segment_point::test;
-   test(test_case);
-}
-
 namespace tests_contains_convex_contour_point
 {
    void test()
    {
-      util::uniform_random_int<int, std::mt19937> size_distr(1000, 100000);
-      std::mt19937 gen;
-      std::uniform_real_distribution<> distr(-100.0, 100.0);
+      util::uniform_random_int<int, std::random_device> size_distr(1000, 100000);
+      util::uniform_random_real<double, std::random_device> distr(-100.0, 100.0);
       for (int k = 0; k < 250; ++k)
       {
          std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_pts = uniform_cgal_points(size_distr());
@@ -130,8 +115,8 @@ namespace tests_contains_convex_contour_point
          cg::contour_2 pol(pts);
          for (int q = 0; q < 10; ++q)
          {
-            double x = distr(gen);
-            double y = distr(gen);
+            double x = distr();
+            double y = distr();
             bool cgal_res = false;
             if (CGAL::bounded_side_2(cgal_pol.vertices_begin(), cgal_pol.vertices_end(),
                                      CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(x, y)) == CGAL::ON_BOUNDED_SIDE)
@@ -144,7 +129,19 @@ namespace tests_contains_convex_contour_point
    }
 }
 
-TEST(contains, DISABLED_convex_contour_point)
+TEST(contains, triangle_point)
+{
+   void (*test_case)() = tests_contains_triangle_point::test;
+   test(test_case);
+}
+
+TEST(contains, segment_point)
+{
+   void (*test_case)() = tests_contains_segment_point::test;
+   test(test_case);
+}
+
+TEST(contains, convex_contour_point)
 {
    void (*test_case)() = tests_contains_convex_contour_point::test;
    test(test_case);

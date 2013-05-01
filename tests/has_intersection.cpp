@@ -12,21 +12,21 @@
 #include <limits>
 
 #include "test.h"
+#include <misc/random_utils.h>
 
 namespace tests_has_intersection_segment_segment
 {
    void test()
    {
-      std::mt19937 gen;
-      std::uniform_real_distribution<> distr(-5.0, 5.0);
+      util::uniform_random_real<double, std::random_device> distr(-5.0, 5.0);
       std::array<double, 4> seg1;
       std::array<double, 4> seg2;
       for (int k = 0; k < 2500; ++k)
       {
          for (size_t i = 0; i < seg1.size(); ++i)
          {
-            seg1[i] = distr(gen);
-            seg2[i] = distr(gen);
+            seg1[i] = distr();
+            seg2[i] = distr();
          }
          EXPECT_EQ(cg::has_intersection(cg::segment_2(cg::point_2(seg1[0], seg1[1]), cg::point_2(seg1[2], seg1[3])),
                cg::segment_2(cg::point_2(seg2[0], seg2[1]), cg::point_2(seg2[2], seg2[3]))),
@@ -56,30 +56,23 @@ namespace tests_has_intersection_segment_segment
    }
 }
 
-TEST(has_intersection, DISABLED_segment_segment)
-{
-   void (*test_case)() = tests_has_intersection_segment_segment::test;
-   test(test_case);
-}
-
 namespace tests_has_intersection_triangle_segment
 {
    void test()
    {
-      std::mt19937 gen;
-      std::uniform_real_distribution<> distr(-5.0, 5.0);
+      util::uniform_random_real<double, std::random_device> distr(-5.0, 5.0);
       std::array<double, 6> tr;
       std::array<double, 4> seg;
       for (int k = 0; k < 2500; ++k)
       {
          for (size_t i = 0; i < seg.size(); ++i)
          {
-            tr[i] = distr(gen);
-            seg[i] = distr(gen);
+            tr[i] = distr();
+            seg[i] = distr();
          }
          for (size_t i = seg.size(); i < tr.size(); ++i)
          {
-            tr[i] = distr(gen);
+            tr[i] = distr();
          }
          if (cg::orientation(cg::point_2(tr[0], tr[1]), cg::point_2(tr[2], tr[3]), cg::point_2(tr[4], tr[5])) == cg::CG_COLLINEAR)
          {
@@ -98,26 +91,19 @@ namespace tests_has_intersection_triangle_segment
    }
 }
 
-TEST(has_intersection, DISABLED_triangle_segment)
-{
-   void (*test_case)() = tests_has_intersection_triangle_segment::test;
-   test(test_case);
-}
-
 namespace tests_has_intersection_rectangle_segment
 {
    void test()
    {
-      std::mt19937 gen;
-      std::uniform_real_distribution<> distr(-5.0, 5.0);
+      util::uniform_random_real<double, std::random_device> distr(-5.0, 5.0);
       std::array<double, 4> rect;
       std::array<double, 4> seg;
       for (int k = 0; k < 2500; ++k)
       {
          for (size_t i = 0; i < rect.size(); ++i)
          {
-            rect[i] = distr(gen);
-            seg[i] = distr(gen);
+            rect[i] = distr();
+            seg[i] = distr();
          }
          if (rect[1] < rect[0])
          {
@@ -147,7 +133,19 @@ namespace tests_has_intersection_rectangle_segment
    }
 }
 
-TEST(has_intersection, DISABLED_rectangle_segment)
+TEST(has_intersection, segment_segment)
+{
+   void (*test_case)() = tests_has_intersection_segment_segment::test;
+   test(test_case);
+}
+
+TEST(has_intersection, triangle_segment)
+{
+   void (*test_case)() = tests_has_intersection_triangle_segment::test;
+   test(test_case);
+}
+
+TEST(has_intersection, rectangle_segment)
 {
    void (*test_case)() = tests_has_intersection_rectangle_segment::test;
    test(test_case);
