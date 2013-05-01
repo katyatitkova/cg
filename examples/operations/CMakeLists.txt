@@ -16,3 +16,6 @@ target_link_libraries(rectangle_intersects_segment visualization ${GMP_LIBRARIES
 
 add_executable(rectangle_contains_point rectangle_contains_point.cpp)
 target_link_libraries(rectangle_contains_point visualization ${GMP_LIBRARIES})
+
+add_executable(segment_contains_point segment_contains_point.cpp)
+target_link_libraries(segment_contains_point visualization ${GMP_LIBRARIES})

@@ -10,7 +10,6 @@
 
 namespace cg
 {
-
    // c is convex contour ccw orientation
    inline bool convex_contains(contour_2 const & c, point_2 const & p)
    {
@@ -23,7 +22,6 @@ namespace cg
       }
       return contains(triangle_2(*it, *(it - 1), c[0]), p);
    }
-
 
    // c is ordinary contour
    template<typename Scalar>
