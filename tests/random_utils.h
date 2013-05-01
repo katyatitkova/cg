@@ -3,7 +3,6 @@
 #include <random>
 #include <algorithm>
 #include <exception>
-#include <iostream>
 
 #include <cg/primitives/point.h>
 #include <misc/random_utils.h>
@@ -13,6 +12,7 @@
 #include <CGAL/Delaunay_triangulation_2.h>
 #include <CGAL/Triangle_2.h>
 #include <CGAL/Polygon_2.h>
+#include <CGAL/convex_hull_2.h>
 
 inline std::vector<cg::point_2> uniform_points(size_t count)
 {
@@ -38,6 +38,25 @@ inline std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kern
    for (size_t l = 0; l != count; ++l)
    {
       res[l] = CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(distr(), distr());
+   }
+
+   return res;
+}
+
+inline std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> uniform_cgal_points_in_circle(size_t count)
+{
+   util::uniform_random_real<double, std::random_device> distr(-100.0, 100.0);
+
+   std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> res;
+
+   while (res.size() < count)
+   {
+      int x = distr();
+      int y = distr();
+      if (x * x + y * y < 100 * 100)
+      {
+         res.push_back(CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(x, y));
+      }
    }
 
    return res;
@@ -148,4 +167,12 @@ inline CGAL::Polygon_2<CGAL::Exact_predicates_exact_constructions_kernel> genera
       plg.push_back(pts[plg.size()]);
    }
    return plg;
+}
+
+inline CGAL::Polygon_2<CGAL::Exact_predicates_exact_constructions_kernel> generate_convex_polygon(size_t size)
+{
+   std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_pts = uniform_cgal_points_in_circle(size);
+   CGAL::Polygon_2<CGAL::Exact_predicates_exact_constructions_kernel> cgal_pol;
+   CGAL::convex_hull_2(cgal_pts.begin(), cgal_pts.end(), std::back_inserter(cgal_pol));
+   return cgal_pol;
 }

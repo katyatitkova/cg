@@ -155,9 +155,7 @@ namespace tests_contains_convex_contour_point
       util::uniform_random_real<double, std::random_device> distr(-100.0, 100.0);
       for (int k = 0; k < 250; ++k)
       {
-         std::vector<CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>> cgal_pts = uniform_cgal_points(size_distr());
-         CGAL::Polygon_2<CGAL::Exact_predicates_exact_constructions_kernel> cgal_pol;
-         CGAL::convex_hull_2(cgal_pts.begin(), cgal_pts.end(), std::back_inserter(cgal_pol));
+         CGAL::Polygon_2<CGAL::Exact_predicates_exact_constructions_kernel> cgal_pol = generate_convex_polygon(size_distr());
          std::vector<cg::point_2> pts;
          for (size_t i = 0; i < cgal_pol.size(); ++i)
          {
@@ -192,13 +190,13 @@ TEST(contains, DISABLED_segment_point)
    test(test_case);
 }
 
-TEST(contains, rectangle_point)
+TEST(contains, DISABLED_rectangle_point)
 {
    void (*test_case)() = tests_contains_rectangle_point::test;
    test(test_case);
 }
 
-TEST(contains, DISABLED_convex_contour_point)
+TEST(contains, convex_contour_point)
 {
    void (*test_case)() = tests_contains_convex_contour_point::test;
    test(test_case);
