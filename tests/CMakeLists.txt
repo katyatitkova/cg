@@ -1,28 +1,11 @@
-# Created by the script cgal_create_cmake_script_with_options
-# This is the CMake script for compiling a set of CGAL applications.
-# A bit edited by hand.
-
 project(cg-test)
 
 cmake_minimum_required(VERSION 2.8)
 
-set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true )
- 
-if ( COMMAND cmake_policy )
+find_package(CGAL)
+include(${CGAL_USE_FILE})
+include(CGAL_CreateSingleSourceCGALProgram)
 
-  cmake_policy( SET CMP0003 NEW )  
-
-endif()
-
-# CGAL and its components
-find_package( CGAL QUIET COMPONENTS  )
-
-# include helper file
-include( ${CGAL_USE_FILE} )
-
-include( CGAL_CreateSingleSourceCGALProgram )
-
-# initial parts
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIR})
 
@@ -40,7 +23,7 @@ set(SOURCES
    convex_hull.cpp
 )
 
-add_executable(cg-test ${SOURCES} intersect_slow.h)
+add_executable(cg-test ${SOURCES})
 target_link_libraries(cg-test ${GTEST_BOTH_LIBRARIES} ${GMP_LIBRARIES})
 
 file(GLOB_RECURSE HEADERS "*.h")

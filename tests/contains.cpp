@@ -65,7 +65,7 @@ namespace tests_contains_triangle_point
    }
 }
 
-TEST(contains, triangle_point)
+TEST(contains, DISABLED_triangle_point)
 {
    void (*test_case)() = tests_contains_triangle_point::test;
    test(test_case);
@@ -104,7 +104,7 @@ namespace tests_contains_segment_point
    }
 }
 
-TEST(contains, segment_point)
+TEST(contains, DISABLED_segment_point)
 {
    void (*test_case)() = tests_contains_segment_point::test;
    test(test_case);
@@ -144,7 +144,7 @@ namespace tests_contains_convex_contour_point
    }
 }
 
-TEST(contains, convex_contour_point)
+TEST(contains, DISABLED_convex_contour_point)
 {
    void (*test_case)() = tests_contains_convex_contour_point::test;
    test(test_case);

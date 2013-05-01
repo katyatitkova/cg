@@ -56,7 +56,7 @@ namespace tests_has_intersection_segment_segment
    }
 }
 
-TEST(has_intersection, segment_segment)
+TEST(has_intersection, DISABLED_segment_segment)
 {
    void (*test_case)() = tests_has_intersection_segment_segment::test;
    test(test_case);
@@ -98,7 +98,7 @@ namespace tests_has_intersection_triangle_segment
    }
 }
 
-TEST(has_intersection, triangle_segment)
+TEST(has_intersection, DISABLED_triangle_segment)
 {
    void (*test_case)() = tests_has_intersection_triangle_segment::test;
    test(test_case);
@@ -147,7 +147,7 @@ namespace tests_has_intersection_rectangle_segment
    }
 }
 
-TEST(has_intersection, rectangle_segment)
+TEST(has_intersection, DISABLED_rectangle_segment)
 {
    void (*test_case)() = tests_has_intersection_rectangle_segment::test;
    test(test_case);

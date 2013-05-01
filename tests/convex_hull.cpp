@@ -72,7 +72,7 @@ namespace tests_convex_hull
       }
    };
 
-   TEST(convex_hull, andrew_cgal)
+   TEST(convex_hull, DISABLED_andrew_cgal)
    {
       test<andrew_hull_wrapper>();
    }
@@ -86,7 +86,7 @@ namespace tests_convex_hull
       }
    };
 
-   TEST(convex_hull, graham_cgal)
+   TEST(convex_hull, DISABLED_graham_cgal)
    {
       test<graham_hull_wrapper>();
    }

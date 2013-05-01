@@ -58,7 +58,7 @@ namespace tests_orientation_uniform_line
    }
 }
 
-TEST(orientation, uniform_line)
+TEST(orientation, DISABLED_uniform_line)
 {
    void (*test_case)() = tests_orientation_uniform_line::test;
    test(test_case);
@@ -92,4 +92,24 @@ TEST(orientation, DISABLED_not_working_contour)
          EXPECT_EQ(res, cgal_res);
       }
    }
+}
+
+namespace tests_simple_polygon_generation
+{
+   void test()
+   {
+      uniform_random_int<int, std::random_device> size_distr(3, 50);
+      for (int k = 0; k < 10; ++k)
+      {
+         auto p = generate_simple_polygon(size_distr());
+         EXPECT_TRUE(p.is_simple());
+         EXPECT_GE(p.size(), 3);
+      }
+   }
+}
+
+TEST(generation, simple_polygon)
+{
+   void (*test_case)() = tests_simple_polygon_generation::test;
+   test(test_case);
 }
