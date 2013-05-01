@@ -196,7 +196,7 @@ TEST(contains, DISABLED_rectangle_point)
    test(test_case);
 }
 
-TEST(contains, convex_contour_point)
+TEST(contains, DISABLED_convex_contour_point)
 {
    void (*test_case)() = tests_contains_convex_contour_point::test;
    test(test_case);

@@ -4,9 +4,8 @@
 
 #include <cg/convex_hull/graham.h>
 #include <cg/convex_hull/andrew.h>
-#include <cg/operations/contains/segment_point.h>
-
-#include <cg/io/point.h>
+#include <cg/convex_hull/quick_hull.h>
+#include <cg/convex_hull/jarvis.h>
 
 #include <misc/random_utils.h>
 
@@ -80,14 +79,42 @@ namespace tests_convex_hull
          return cg::graham_hull(from, to);
       }
    };
+
+   template <typename BidIter>
+   struct quick_hull_wrapper
+   {
+      static BidIter call (BidIter from, BidIter to)
+      {
+         return cg::quick_hull(from, to);
+      }
+   };
+
+   template <typename BidIter>
+   struct jarvis_hull_wrapper
+   {
+      static BidIter call (BidIter from, BidIter to)
+      {
+         return cg::jarvis_hull(from, to);
+      }
+   };
 }
 
-TEST(convex_hull, DISABLED_andrew_cgal)
+TEST(convex_hull, DISABLED_andrew)
 {
    tests_convex_hull::test<tests_convex_hull::andrew_hull_wrapper>();
 }
 
-TEST(convex_hull, DISABLED_graham_cgal)
+TEST(convex_hull, DISABLED_graham)
 {
    tests_convex_hull::test<tests_convex_hull::graham_hull_wrapper>();
+}
+
+TEST(convex_hull, DISABLED_quick_hull)
+{
+   tests_convex_hull::test<tests_convex_hull::quick_hull_wrapper>();
+}
+
+TEST(convex_hull, jarvis)
+{
+   tests_convex_hull::test<tests_convex_hull::jarvis_hull_wrapper>();
 }

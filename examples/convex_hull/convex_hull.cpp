@@ -12,6 +12,7 @@
 
 #include <cg/convex_hull/graham.h>
 #include <cg/convex_hull/andrew.h>
+#include <cg/convex_hull/jarvis.h>
 
 #include <string>
 
@@ -21,7 +22,8 @@ using cg::point_2;
 enum ALGO_TYPE
 {
    GRAHAM,
-   ANDREW
+   ANDREW,
+   JARVIS
 };
 
 struct convex_hull_viewer : cg::visualization::viewer_adapter
@@ -37,6 +39,9 @@ struct convex_hull_viewer : cg::visualization::viewer_adapter
          break;
       case ANDREW:
          type_s = "Andrew";
+         break;
+      case JARVIS:
+         type_s = "Jarvis";
          break;
       }
    }
@@ -74,6 +79,9 @@ struct convex_hull_viewer : cg::visualization::viewer_adapter
       case ANDREW:
          ch_size_ = std::distance(pts_.begin(), cg::andrew_hull(pts_.begin(), pts_.end()));
          break;
+      case JARVIS:
+         ch_size_ = std::distance(pts_.begin(), cg::jarvis_hull(pts_.begin(), pts_.end()));
+         break;
       }
       return true;
    }
@@ -88,7 +96,6 @@ private:
 int main(int argc, char ** argv)
 {
    QApplication app(argc, argv);
-   //convex_hull_viewer viewer(GRAHAM);
    ALGO_TYPE type = GRAHAM;
    if (argc > 1)
    {
@@ -99,6 +106,9 @@ int main(int argc, char ** argv)
          break;
       case 'a':
          type = ANDREW;
+         break;
+      case 'j':
+         type = JARVIS;
          break;
       }
    }
