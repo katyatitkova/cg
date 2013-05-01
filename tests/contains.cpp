@@ -3,6 +3,7 @@
 #include <cg/operations/contains/segment_point.h>
 #include <cg/operations/contains/triangle_point.h>
 #include <cg/operations/contains/contour_point.h>
+#include <cg/operations/contains/rectangle_point.h>
 
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/enum.h>
@@ -59,6 +60,56 @@ namespace tests_contains_triangle_point
                   cg::point_2(p[0], p[1])), cgal_res);
             p[0] = tr[0] * (1 + std::numeric_limits<double>::epsilon());
             p[1] = tr[1] * (1 + std::numeric_limits<double>::epsilon());
+         }
+      }
+   }
+}
+
+namespace tests_contains_rectangle_point
+{
+   void test()
+   {
+      util::uniform_random_real<double, std::random_device> distr(-5.0, 5.0);
+      std::array<double, 4> rect;
+      std::array<double, 2> p;
+      for (int k = 0; k < 2500; ++k)
+      {
+         for (size_t i = 0; i < p.size(); ++i)
+         {
+            rect[i] = distr();
+            p[i] = distr();
+         }
+         for (size_t i = p.size(); i < rect.size(); ++i)
+         {
+            rect[i] = distr();
+         }
+         if (rect[1] < rect[0])
+         {
+            std::swap(rect[1], rect[0]);
+         }
+         if (rect[1] == rect[0])
+         {
+            rect[1] += std::numeric_limits<double>::epsilon();
+         }
+         if (rect[3] < rect[2])
+         {
+            std::swap(rect[3], rect[2]);
+         }
+         if (rect[3] == rect[2])
+         {
+            rect[3] += std::numeric_limits<double>::epsilon();
+         }
+         CGAL::Iso_rectangle_2<CGAL::Exact_predicates_exact_constructions_kernel> cgal_rect(CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(rect[0], rect[2]),
+                        CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(rect[1], rect[3]));
+         for (int j = 0; j < 2; ++j)
+         {
+            EXPECT_EQ(cg::contains(cg::rectangle_2(cg::range(rect[0], rect[1]), cg::range(rect[2], rect[3])), cg::point_2(p[0], p[1])),
+                  cgal_rect.has_on_bounded_side(CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(p[0], p[1])) ||
+                  cgal_rect.has_on_boundary(CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(p[0], p[1])));
+            for (size_t i = 0; i < p.size(); ++i)
+            {
+               p[i] = rect[i];
+            }
          }
       }
    }
@@ -138,6 +189,12 @@ TEST(contains, DISABLED_triangle_point)
 TEST(contains, DISABLED_segment_point)
 {
    void (*test_case)() = tests_contains_segment_point::test;
+   test(test_case);
+}
+
+TEST(contains, rectangle_point)
+{
+   void (*test_case)() = tests_contains_rectangle_point::test;
    test(test_case);
 }
 

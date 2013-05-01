@@ -116,7 +116,7 @@ TEST(generation, DISABLED_simple_polygon)
    test(test_case);
 }
 
-TEST(orientation, contour)
+TEST(orientation, DISABLED_contour)
 {
    void (*test_case)() = tests_orientation_contour::test;
    test(test_case);
