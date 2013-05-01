@@ -32,7 +32,7 @@ namespace tests_convex_convex
    }
 }
 
-TEST(convex, convex)
+TEST(convex, DISABLED_convex)
 {
    void (*test_case)() = tests_convex_convex::test;
    test(test_case);

@@ -39,7 +39,9 @@ namespace tests_convex_hull
          for (size_t i = 0; i < cgal_pts.size(); ++i)
          {
             pts.push_back(cg::point_2(CGAL::to_double(cgal_pts[i].x()), CGAL::to_double(cgal_pts[i].y())));
+            std::cout << pts[i] << " ";
          }
+         std::cout << std::endl;
          cgal_res.resize(0);
          CGAL::convex_hull_2(cgal_pts.begin(), cgal_pts.end(), std::back_inserter(cgal_res));
          auto it_end = HullAlgorithm<std::vector<cg::point_2>::iterator>::call(pts.begin(), pts.end());
@@ -71,14 +73,15 @@ namespace tests_convex_hull
    template <template <typename T> class Func>
    void test()
    {
-      std::thread t1(convex_hull_test<Func>);
+      /*std::thread t1(convex_hull_test<Func>);
       std::thread t2(convex_hull_test<Func>);
       std::thread t3(convex_hull_test<Func>);
       std::thread t4(convex_hull_test<Func>);
       t1.join();
       t2.join();
       t3.join();
-      t4.join();
+      t4.join();*/
+      convex_hull_test<Func>();
    }
 
    template <typename BidIter>
@@ -128,7 +131,7 @@ TEST(convex_hull, DISABLED_graham)
    tests_convex_hull::test<tests_convex_hull::graham_hull_wrapper>();
 }
 
-TEST(convex_hull, DISABLED_quick_hull)
+TEST(convex_hull, quick_hull)
 {
    tests_convex_hull::test<tests_convex_hull::quick_hull_wrapper>();
 }

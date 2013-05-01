@@ -178,6 +178,37 @@ namespace tests_contains_convex_contour_point
    }
 }
 
+namespace tests_contains_contour_point
+{
+   void test()
+   {
+      util::uniform_random_int<int, std::random_device> size_distr(3, 50);
+      util::uniform_random_real<double, std::random_device> distr(-100.0, 100.0);
+      for (int k = 0; k < 10; ++k)
+      {
+         CGAL::Polygon_2<CGAL::Exact_predicates_exact_constructions_kernel> cgal_pol = generate_simple_polygon(size_distr());
+         std::vector<cg::point_2> pts;
+         for (size_t i = 0; i < cgal_pol.size(); ++i)
+         {
+            pts.push_back(cg::point_2(CGAL::to_double(cgal_pol[i].x()), CGAL::to_double(cgal_pol[i].y())));
+         }
+         cg::contour_2 pol(pts);
+         for (int q = 0; q < 10; ++q)
+         {
+            double x = distr();
+            double y = distr();
+            bool cgal_res = false;
+            if (CGAL::bounded_side_2(cgal_pol.vertices_begin(), cgal_pol.vertices_end(),
+                                     CGAL::Point_2<CGAL::Exact_predicates_exact_constructions_kernel>(x, y)) == CGAL::ON_BOUNDED_SIDE)
+            {
+               cgal_res = true;
+            }
+            EXPECT_EQ(cg::contains(pol, cg::point_2(x, y)), cgal_res);
+         }
+      }
+   }
+}
+
 TEST(contains, DISABLED_triangle_point)
 {
    void (*test_case)() = tests_contains_triangle_point::test;
@@ -199,5 +230,11 @@ TEST(contains, DISABLED_rectangle_point)
 TEST(contains, DISABLED_convex_contour_point)
 {
    void (*test_case)() = tests_contains_convex_contour_point::test;
+   test(test_case);
+}
+
+TEST(contains, DISABLED_contour_point)
+{
+   void (*test_case)() = tests_contains_contour_point::test;
    test(test_case);
 }
