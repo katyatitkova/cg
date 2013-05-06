@@ -13,6 +13,16 @@ namespace cg
    // c is convex contour ccw orientation
    inline bool convex_contains(contour_2 const & c, point_2 const & p)
    {
+      if (c.size() == 0)
+         return false;
+      if (c.size() == 1)
+         return c[0] == p;
+      if (c.size() == 2)
+         return cg::contains(cg::segment_2(c[0], c[1]), p);
+
+      //if (cg::orientation(c[0], c[1], q) == CG_RIGHT)
+        // return false;
+
       auto it = std::lower_bound(c.begin() + 2, c.end(), p,
                                  [&c] (point_2 const & left, point_2 const & right)
       { return orientation(c[0], left, right) == CG_LEFT; });
@@ -27,8 +37,9 @@ namespace cg
    template<typename Scalar>
    inline bool contains(contour_2t<Scalar> const & a, point_2t<Scalar> const & b)
    {
-      int num_intersections = 0;
-      for (size_t pr = a.vertices_num() - 1, cur = 0; cur != a.vertices_num(); pr = cur++) {
+      size_t num_intersections = 0;
+      for (size_t pr = a.vertices_num() - 1, cur = 0; cur != a.vertices_num(); pr = cur++)
+      {
          point_2t<Scalar> min_point = a[pr];
          point_2t<Scalar> max_point = a[cur];
          if (min_point.y > max_point.y)
@@ -36,11 +47,14 @@ namespace cg
          orientation_t orient = orientation(min_point, max_point, b);
          if (orient == CG_COLLINEAR && std::min(min_point, max_point) <= b && b <= std::max(min_point, max_point))
             return true;
+
          if (max_point.y <= b.y || min_point.y > b.y)
             continue;
+
          if (orient == CG_LEFT)
             num_intersections++;
       }
+      
       return num_intersections % 2;
    }
 }

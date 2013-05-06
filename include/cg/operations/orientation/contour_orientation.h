@@ -4,6 +4,7 @@
 
 #include <cg/primitives/point.h>
 #include <cg/primitives/contour.h>
+#include <cg/operations/orientation/points_orientation.h>
 
 #include <boost/optional.hpp>
 

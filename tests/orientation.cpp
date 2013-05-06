@@ -7,6 +7,7 @@
 
 #include <cg/operations/orientation/points_orientation.h>
 #include <cg/operations/orientation/contour_orientation.h>
+
 #include <misc/random_utils.h>
 
 #include "random_utils.h"

@@ -1,5 +1,9 @@
 #include <gtest/gtest.h>
 
+#include "random_utils.h"
+
+#include <boost/assign/list_of.hpp>
+
 #include <cg/operations/contains/segment_point.h>
 #include <cg/operations/contains/triangle_point.h>
 #include <cg/operations/contains/contour_point.h>

@@ -95,6 +95,23 @@ namespace cg
       return *orientation_r()(a, b, c);
    }
 
+   /*inline bool counterclockwise(contour_2 const & c)
+   {
+      if (c.size() < 3) return true;
+
+      contour_2::const_iterator it_min_point = std::min_element(c.begin(), c.end());
+
+      point_2 min_point = *it_min_point;
+
+      contour_2::circulator_t it_prev = --c.circulator(it_min_point);
+      contour_2::circulator_t it_next = ++c.circulator(it_min_point);
+
+      point_2 prev = *it_prev;
+      point_2 next = *it_next;
+
+      return orientation(prev, min_point, next) == CG_LEFT;
+   }*/
+
    inline bool collinear_are_ordered_along_line(point_2 const & a, point_2 const & b, point_2 const & c)
    {
       return (a <= b && b <= c) || (c <= b && b <= a);
