@@ -24,6 +24,7 @@ set(SOURCES
    convex.cpp
    intersection.cpp
    dynamic_convex_hull.cpp
+   douglas_peucker.cpp
 )
 
 add_executable(cg-test ${SOURCES})

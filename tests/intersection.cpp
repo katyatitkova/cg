@@ -92,7 +92,7 @@ namespace tests_intersection_segment_segment
    }
 }
 
-TEST(intersection, segment_segment)
+TEST(intersection, DISABLED_segment_segment)
 {
    void (*test_case)() = tests_intersection_segment_segment::test;
    test(test_case);

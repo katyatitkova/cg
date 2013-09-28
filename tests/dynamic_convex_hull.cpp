@@ -34,7 +34,7 @@ bool is_convex_hull(FwdIter ab, FwdIter ae, FwdIter hb, FwdIter he)
    return true;
 }
 
-TEST(dynamic_convex_hull, without_deleting1)
+TEST(dynamic_convex_hull, DISABLED_without_deleting1)
 {
    using cg::point_2;
 
@@ -54,7 +54,7 @@ for (point_2 p : pts)
    EXPECT_TRUE(is_convex_hull(pts.begin(), pts.end(), dh.get_hull().first, dh.get_hull().second));
 }
 
-TEST(dynamic_convex_hull, without_deleting2)
+TEST(dynamic_convex_hull, DISABLED_without_deleting2)
 {
    using cg::point_2;
 
@@ -76,7 +76,7 @@ TEST(dynamic_convex_hull, without_deleting2)
 
 }
 
-TEST(dynamic_convex_hull, unifrom_without_deleting)
+TEST(dynamic_convex_hull, DISABLED_unifrom_without_deleting)
 {
    using cg::point_2;
 
@@ -92,7 +92,7 @@ TEST(dynamic_convex_hull, unifrom_without_deleting)
 
 }
 
-TEST(dynamic_convex_hull, with_deleting)
+TEST(dynamic_convex_hull, DISABLED_with_deleting)
 {
    using cg::point_2;
 
@@ -125,7 +125,7 @@ TEST(dynamic_convex_hull, with_deleting)
 
 }
 
-TEST(dynamic_convex_hull, unifrom_with_deleting)
+TEST(dynamic_convex_hull, DISABLED_unifrom_with_deleting)
 {
    using cg::point_2;
 
